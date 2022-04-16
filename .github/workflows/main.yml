@@ -1,0 +1,32 @@
+name: CI
+
+on: push
+
+jobs:
+  StaticCheck:
+    name: phpStan & Psalm test
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout project
+        uses: actions/checkout@v1
+
+      - name: composer install
+        run: composer install
+
+      - name: run phpStan
+        run: vendor/bin/phpstan analyse -c phpStan.neon
+
+      - name: run Psalm
+        run: vendor/bin/psalm
+  Test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout project
+        uses: actions/checkout@v1
+
+      - name: composer install
+        run: composer install
+
+      - name: run phpunit
+        run: php vendor/bin/phpunit
