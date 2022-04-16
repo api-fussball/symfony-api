@@ -3,8 +3,8 @@ name: CI
 on: push
 
 jobs:
-  StaticCheck:
-    name: phpStan & Psalm test
+  PhpStan:
+    name: phpStan
     runs-on: ubuntu-latest
     steps:
       - name: checkout project
@@ -15,11 +15,8 @@ jobs:
 
       - name: run phpStan
         run: vendor/bin/phpstan analyse -c phpStan.neon
-
-      - name: run Psalm
-        run: vendor/bin/psalm
-  Test:
-    name: test
+  Psalm:
+    name: psalm
     runs-on: ubuntu-latest
     steps:
       - name: checkout project
@@ -28,5 +25,5 @@ jobs:
       - name: composer install
         run: composer install
 
-      - name: run phpunit
-        run: php vendor/bin/phpunit
+      - name: run Psalm
+        run: vendor/bin/psalm

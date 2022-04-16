@@ -6,14 +6,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        php: ['7.4', '8.0']
-        experimental: [false]
-        include:
-          - php: '8.1'
-            experimental: true
+        php: ['8.1']
     steps:
       - uses: actions/checkout@v3
 
@@ -23,15 +18,8 @@ jobs:
           tools: pecl
           extensions: xdebug
 
-      -   name: Configure for PHP 8.1
-          run: composer config platform.php 8.0.99
-          if: matrix.php == '8.1'
-
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
-
-      - name: Create env
-        run: touch .env
 
       - name: Run test suite
         run: php vendor/bin/phpunit
@@ -39,38 +27,4 @@ jobs:
       - uses: codecov/codecov-action@v3
         with:
           file: ./clover.xml
-
-      - name: Download box
-        run: wget https://github.com/humbug/box/releases/download/3.13.0/box.phar
-
-      - name: Remove dev deps
-        run: composer install --no-dev
-
-      - name: Build phar
-        run: php box.phar compile
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: frosh-plugin-upload.zip
-          path: frosh-plugin-upload.phar
-
-  dockerUpload:
-    runs-on: ubuntu-latest
-    needs: [build]
-    if: github.ref == 'refs/heads/master'
-    steps:
-      - uses: actions/checkout@v3
-      - name: Login into Docker Registery
-        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
-
-      - name: Login into Github Docker Registery
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Build image and push
-        run: |
-          docker build -t friendsofshopware/plugin-uploader:master .
-          docker build -t ghcr.io/friendsofshopware/plugin-uploader:master .
-          docker push friendsofshopware/plugin-uploader:master
-          docker push ghcr.io/friendsofshopware/plugin-uploader:master
     

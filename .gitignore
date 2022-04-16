@@ -10,7 +10,8 @@
 ###< symfony/framework-bundle ###
 
 .idea/
-
+clover.xml
+coverage/
 
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
@@ -21,3 +22,6 @@
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+
+
