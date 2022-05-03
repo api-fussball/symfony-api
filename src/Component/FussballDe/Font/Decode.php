@@ -23,6 +23,7 @@ final class Decode implements DecodeInterface
     private const URL = 'https://www.fussball.de/export.fontface/-/format/woff/id/%s/type/font';
     private const SHELL_COMMAND = 'cd %s ;ttx -t cmap %s';
     private const CONVERT_FILE = '%s/%s.ttx';
+    private const CACHE_FILE = '%s/%s.json';
 
     public function __construct(private HttpClientInterface $client)
     {
@@ -39,8 +40,10 @@ final class Decode implements DecodeInterface
         file_put_contents($this->cacheDir . '/' . $fontWoff, $response->getContent());
         shell_exec(sprintf(self::SHELL_COMMAND, $this->cacheDir, $fontWoff));
 
+        $convertFile = sprintf(self::CONVERT_FILE, $this->cacheDir, $fontName);
+
         $domDocument = new \DOMDocument();
-        $domDocument->load(sprintf(self::CONVERT_FILE, $this->cacheDir, $fontName));
+        $domDocument->load($convertFile);
 
         $mapElement = $domDocument->getElementsByTagName('map');
 
@@ -54,7 +57,8 @@ final class Decode implements DecodeInterface
             $info[$code] = self::MAP[$name];
         }
 
-//       json_encode()
+        unlink($this->cacheDir . '/' . $fontWoff);
+        unlink($convertFile);
 
         return $info;
     }

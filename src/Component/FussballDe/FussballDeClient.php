@@ -3,14 +3,14 @@
 namespace App\Component\FussballDe;
 
 use App\Component\Dto\FussballDeRequest;
-use App\Component\FussballDe\Font\DecodeInterface;
+use App\Component\FussballDe\Font\DecodeProxyInterface;
 use App\Component\FussballDe\Model\ClubInfoInterface;
 
 final class FussballDeClient implements FussballDeClientInterface
 {
     public function __construct(
         private ClubInfoInterface $clubInfo,
-        private DecodeInterface $decode,
+        private DecodeProxyInterface $decode,
     )
     {
     }
