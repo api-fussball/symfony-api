@@ -3,12 +3,14 @@
 namespace App\Component\FussballDe;
 
 use App\Component\Dto\FussballDeRequest;
+use App\Component\FussballDe\Font\DecodeInterface;
 use App\Component\FussballDe\Model\ClubInfoInterface;
 
 final class FussballDeClient implements FussballDeClientInterface
 {
     public function __construct(
         private ClubInfoInterface $clubInfo,
+        private DecodeInterface $decode,
     )
     {
     }
@@ -16,7 +18,7 @@ final class FussballDeClient implements FussballDeClientInterface
     /**
      * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
      *
-     * @return \App\Component\Dto\ClubInfoTransfer[]
+     * @return \App\Component\Dto\ClubTeamInfoTransfer[]
      */
     public function clubInfo(FussballDeRequest $fussballDeRequest): array
     {

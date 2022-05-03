@@ -2,7 +2,7 @@
 
 namespace App\Component\Dto;
 
-final class ClubInfoTransfer
+final class ClubMatchInfoTransfer
 {
     public string $url = '';
     public string $name = '';

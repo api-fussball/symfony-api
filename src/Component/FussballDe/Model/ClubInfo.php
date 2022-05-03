@@ -3,7 +3,7 @@
 namespace App\Component\FussballDe\Model;
 
 use App\Component\Crawler\CrawlerClientInterface;
-use App\Component\Dto\ClubInfoTransfer;
+use App\Component\Dto\ClubTeamInfoTransfer;
 use App\Component\Dto\FussballDeRequest;
 
 final class ClubInfo implements ClubInfoInterface
@@ -19,7 +19,7 @@ final class ClubInfo implements ClubInfoInterface
     }
 
     /**
-     * @return \App\Component\Dto\ClubInfoTransfer[]
+     * @return \App\Component\Dto\ClubTeamInfoTransfer[]
      */
     public function crawler(FussballDeRequest $fussballDeRequest): array
     {
@@ -43,7 +43,7 @@ final class ClubInfo implements ClubInfoInterface
                 continue;
             }
 
-            $clubInfoTransfer = new ClubInfoTransfer();
+            $clubInfoTransfer = new ClubTeamInfoTransfer();
             $clubInfoTransfer->url = str_replace('https://www.fussball.de', '', $url);
             $clubInfoTransfer->name = utf8_decode(trim($teamHtmlInfo->nodeValue));
 

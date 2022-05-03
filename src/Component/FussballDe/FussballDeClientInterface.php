@@ -9,7 +9,7 @@ interface FussballDeClientInterface
     /**
      * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
      *
-     * @return \App\Component\Dto\ClubInfoTransfer[]
+     * @return \App\Component\Dto\ClubTeamInfoTransfer[]
      */
     public function clubInfo(FussballDeRequest $fussballDeRequest): array;
 }

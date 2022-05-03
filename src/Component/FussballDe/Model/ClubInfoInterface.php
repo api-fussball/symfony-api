@@ -7,7 +7,7 @@ use App\Component\Dto\FussballDeRequest;
 interface ClubInfoInterface
 {
     /**
-     * @return \App\Component\Dto\ClubInfoTransfer[]
+     * @return \App\Component\Dto\ClubTeamInfoTransfer[]
      */
     public function crawler(FussballDeRequest $fussballDeRequest): array;
 }

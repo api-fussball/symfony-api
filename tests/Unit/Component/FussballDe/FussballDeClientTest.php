@@ -15,7 +15,7 @@ final class FussballDeClientTest extends TestCase
         $crowlerFaker = $this->createStub(HttpClientInterface::class);
 
         $crowlerFaker->method('getHtml')
-                     ->willReturn(file_get_contents(__DIR__ . '/../../../_data/club_info.html'));
+            ->willReturn(file_get_contents(__DIR__ . '/../../../_data/club_info.html'));
 
         $fussballDeClinet = new ClubInfo(new CrawlerClient($crowlerFaker));
 
