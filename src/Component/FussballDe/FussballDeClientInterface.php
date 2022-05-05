@@ -11,5 +11,5 @@ interface FussballDeClientInterface
      *
      * @return \App\Component\Dto\ClubTeamInfoTransfer[]
      */
-    public function clubInfo(FussballDeRequest $fussballDeRequest): array;
+    public function teamsInfo(FussballDeRequest $fussballDeRequest): array;
 }

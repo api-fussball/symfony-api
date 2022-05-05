@@ -6,7 +6,7 @@ use App\Component\Crawler\CrawlerClientInterface;
 use App\Component\Dto\ClubTeamInfoTransfer;
 use App\Component\Dto\FussballDeRequest;
 
-final class ClubInfo implements ClubInfoInterface
+final class TeamsInfo implements TeamsInfoInterface
 {
 
     private const URL = '/ajax.club.teams/-/action/search/id/%s/saison/2122/mannschaftsart/-1/wettkampftyp/-1';

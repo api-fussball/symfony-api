@@ -2,7 +2,6 @@
 
 namespace App\Component\FussballDe\Font;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class DecodeProxy implements DecodeProxyInterface

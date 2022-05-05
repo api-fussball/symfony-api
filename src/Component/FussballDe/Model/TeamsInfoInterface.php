@@ -4,7 +4,7 @@ namespace App\Component\FussballDe\Model;
 
 use App\Component\Dto\FussballDeRequest;
 
-interface ClubInfoInterface
+interface TeamsInfoInterface
 {
     /**
      * @return \App\Component\Dto\ClubTeamInfoTransfer[]

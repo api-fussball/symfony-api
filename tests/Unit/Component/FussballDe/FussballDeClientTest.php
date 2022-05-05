@@ -5,7 +5,7 @@ namespace App\Tests\Unit\Component\FussballDe;
 use App\Component\Crawler\Bridge\HttpClientInterface;
 use App\Component\Crawler\CrawlerClient;
 use App\Component\Dto\FussballDeRequest;
-use App\Component\FussballDe\Model\ClubInfo;
+use App\Component\FussballDe\Model\TeamsInfo;
 use PHPUnit\Framework\TestCase;
 
 final class FussballDeClientTest extends TestCase
@@ -17,7 +17,7 @@ final class FussballDeClientTest extends TestCase
         $crowlerFaker->method('getHtml')
             ->willReturn(file_get_contents(__DIR__ . '/../../../_data/club_info.html'));
 
-        $fussballDeClinet = new ClubInfo(new CrawlerClient($crowlerFaker));
+        $fussballDeClinet = new TeamsInfo(new CrawlerClient($crowlerFaker));
 
         $info = $fussballDeClinet->crawler(new FussballDeRequest);
 

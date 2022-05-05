@@ -26,7 +26,7 @@ class Api
         $clubInfoTransfer = new FussballDeRequest();
         $clubInfoTransfer->id = $id;
 
-        $clubInfoTransferList = $this->fussballDeClient->clubInfo($clubInfoTransfer);
+        $clubInfoTransferList = $this->fussballDeClient->teamsInfo($clubInfoTransfer);
 
         return new JsonResponse(['data' => $clubInfoTransferList]);
     }

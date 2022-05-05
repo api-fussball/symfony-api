@@ -2,6 +2,7 @@
 
 namespace App\Component\FussballDe\Font;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class Decode implements DecodeInterface
@@ -21,23 +22,30 @@ final class Decode implements DecodeInterface
     ];
 
     private const URL = 'https://www.fussball.de/export.fontface/-/format/woff/id/%s/type/font';
-    private const SHELL_COMMAND = 'cd %s ;ttx -t cmap %s';
+    private const SHELL_COMMAND = 'cd %s ;ttx -t cmap %s >/dev/null 2>&1';
     private const CONVERT_FILE = '%s/%s.ttx';
-    private const CACHE_FILE = '%s/%s.json';
+    private const FONT_FILE_PATH = '%s/%s.woff';
 
-    public function __construct(private HttpClientInterface $client)
+    private string $cacheDir;
+
+    public function __construct(private HttpClientInterface $client, ParameterBagInterface $parameterBag)
     {
-        $this->cacheDir = __DIR__;
+        $this->cacheDir = $parameterBag->get('kernel.cache_dir') . '/fonts';
     }
 
     public function decodeFont(string $fontName): array
     {
+        if (!is_dir($this->cacheDir)) {
+            mkdir($this->cacheDir);
+        }
+
         $url = sprintf(self::URL, $fontName);
 
         $response = $this->client->request('GET', $url);
 
-        $fontWoff = $fontName . '.woff';
-        file_put_contents($this->cacheDir . '/' . $fontWoff, $response->getContent());
+        $fontWoff = sprintf(self::FONT_FILE_PATH, $this->cacheDir, $fontName);
+        file_put_contents($fontWoff, $response->getContent());
+
         shell_exec(sprintf(self::SHELL_COMMAND, $this->cacheDir, $fontWoff));
 
         $convertFile = sprintf(self::CONVERT_FILE, $this->cacheDir, $fontName);
@@ -57,7 +65,7 @@ final class Decode implements DecodeInterface
             $info[$code] = self::MAP[$name];
         }
 
-        unlink($this->cacheDir . '/' . $fontWoff);
+        unlink($fontWoff);
         unlink($convertFile);
 
         return $info;
