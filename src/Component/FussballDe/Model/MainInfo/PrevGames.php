@@ -101,12 +101,12 @@ final class PrevGames
             $matchInfo = $info->previousElementSibling->getElementsByTagName('span')[0];
 
             $clubMatchInfoTransferList[$key]->awayTeam = utf8_decode($matchInfo->getAttribute('data-alt'));
-            $clubMatchInfoTransferList[$key]->awayLogo = 'https://' . $matchInfo->getAttribute('data-responsive-image');
+            $clubMatchInfoTransferList[$key]->awayLogo = 'https:' . $matchInfo->getAttribute('data-responsive-image');
 
             $matchInfo = $info->previousElementSibling->previousElementSibling->previousElementSibling->getElementsByTagName('span')[0];
 
             $clubMatchInfoTransferList[$key]->homeTeam = utf8_decode($matchInfo->getAttribute('data-alt'));
-            $clubMatchInfoTransferList[$key]->homeLogo = 'https://' . $matchInfo->getAttribute('data-responsive-image');
+            $clubMatchInfoTransferList[$key]->homeLogo = 'https:' . $matchInfo->getAttribute('data-responsive-image');
 
             $result = trim($info->nodeValue);
 
