@@ -8,6 +8,7 @@ use App\Component\Crawler\CrawlerClient;
 use App\Component\Dto\FussballDeRequest;
 use App\Component\FussballDe\Font\Decode;
 use App\Component\FussballDe\Font\DecodeProxy;
+use App\Component\FussballDe\Font\DecodeProxyInterface;
 use App\Component\FussballDe\Model\MainInfo\PrevGames;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -22,15 +23,13 @@ class PrevGamesTest extends TestCase
         $crawlerFaker->method('getHtml')
             ->willReturn(file_get_contents(__DIR__ . '/../../../../../_data/prev_games.html'));
 
+        $decodeProxyStub = $this->createStub(DecodeProxyInterface::class);
+        $decodeProxyStub->method('decodeFont')
+            ->willReturn(json_decode(file_get_contents(__DIR__ . '/ap6umsuq.json'), true));
+
         $prevGames = new PrevGames(
             $crawlerFaker,
-            new DecodeProxy(
-                new Decode(
-                    new CurlHttpClient(),
-                    $this->getParameterBagMock(),
-                ),
-                $this->getParameterBagMock(),
-            )
+            $decodeProxyStub
         );
 
         $matchInfo = $prevGames->get(new FussballDeRequest());

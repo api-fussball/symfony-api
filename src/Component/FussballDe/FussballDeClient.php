@@ -3,14 +3,14 @@
 namespace App\Component\FussballDe;
 
 use App\Component\Dto\FussballDeRequest;
-use App\Component\FussballDe\Font\DecodeProxyInterface;
+use App\Component\FussballDe\Model\MainInfo\PrevGamesInterface;
 use App\Component\FussballDe\Model\TeamsInfoInterface;
 
 final class FussballDeClient implements FussballDeClientInterface
 {
     public function __construct(
-        private TeamsInfoInterface   $clubInfo,
-        private DecodeProxyInterface $decode,
+        private TeamsInfoInterface $teamsInfo,
+        private PrevGamesInterface $prevGames,
     )
     {
     }
@@ -22,7 +22,19 @@ final class FussballDeClient implements FussballDeClientInterface
      */
     public function teamsInfo(FussballDeRequest $fussballDeRequest): array
     {
-        return $this->clubInfo->crawler($fussballDeRequest);
+        return $this->teamsInfo->crawler($fussballDeRequest);
     }
+
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubTeamInfoTransfer[]
+     */
+    public function prevClubGames(FussballDeRequest $fussballDeRequest): array
+    {
+        return $this->prevGames->get($fussballDeRequest);
+    }
+
+
 
 }

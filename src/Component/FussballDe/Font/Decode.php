@@ -33,6 +33,11 @@ final class Decode implements DecodeInterface
         $this->cacheDir = $parameterBag->get('kernel.cache_dir') . '/fonts';
     }
 
+    /**
+     * @param string $fontName
+     *
+     * @return array
+     */
     public function decodeFont(string $fontName): array
     {
         if (!is_dir($this->cacheDir)) {

@@ -5,18 +5,16 @@ namespace App\Component\FussballDe\Model\MainInfo;
 use App\Component\Crawler\Bridge\HttpClientInterface;
 use App\Component\Dto\ClubMatchInfoTransfer;
 use App\Component\Dto\FussballDeRequest;
-use App\Component\FussballDe\Font\DecodeProxy;
+use App\Component\FussballDe\Font\DecodeProxyInterface;
 
-final class PrevGames
+final class PrevGames implements PrevGamesInterface
 {
     private const URL = '/ajax.club.prev.games/-/id/%s/mode/PAGE';
     private const XPATH = '//*[contains(@class, "%s")]';
 
-    private array $fontInfo = [];
-
     public function __construct(
-        private HttpClientInterface $crawlerClient,
-        private DecodeProxy         $decodeProxy,
+        private HttpClientInterface  $crawlerClient,
+        private DecodeProxyInterface $decodeProxy,
     )
     {
     }

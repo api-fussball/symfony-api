@@ -32,4 +32,20 @@ class ApiTest extends WebTestCase
         self::assertSame('Herren - Fühlingen I', $responseRequest['data'][0]['name']);
     }
 
+
+    public function testPrevGames()
+    {
+        $this->client->request('GET', '/api/club/prev_games/00ES8GN91400002IVV0AG08LVUPGND5I');
+
+        self::assertResponseStatusCodeSame(200);
+
+        $response = $this->client->getResponse();
+
+        self::assertTrue($response->headers->contains('Content-Type', 'application/json'));
+
+        $responseRequest = json_decode($response->getContent(), true);
+
+        self::assertArrayHasKey('data', $responseRequest);
+    }
+
 }
