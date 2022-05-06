@@ -21,8 +21,8 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Install python
-        run: python --version
+      - name: Install python lib
+        run: pip install fonttools
 
       - name: Run test suite
         run: php vendor/bin/phpunit
