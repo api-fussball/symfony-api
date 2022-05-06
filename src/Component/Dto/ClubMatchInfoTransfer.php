@@ -4,6 +4,14 @@ namespace App\Component\Dto;
 
 final class ClubMatchInfoTransfer
 {
-    public string $url = '';
-    public string $name = '';
+    public string $homeScore = '';
+    public string $homeLogo = '';
+    public string $awayScore = '';
+    public string $awayLogo = '';
+    public string $time = '';
+    public string $date = '';
+    public string $homeTeam = '';
+    public string $awayTeam = '';
+    public string $ageGroup = '';
+    public string $competition = '';
 }

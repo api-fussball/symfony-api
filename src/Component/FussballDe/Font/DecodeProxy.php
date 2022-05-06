@@ -10,6 +10,8 @@ final class DecodeProxy implements DecodeProxyInterface
 
     private string $cacheDir;
 
+    private array $runTimeCache = [];
+
     public function __construct(private DecodeInterface $decode, ParameterBagInterface $parameterBag)
     {
         $this->cacheDir = $parameterBag->get('kernel.cache_dir') . '/fonts';
@@ -17,6 +19,10 @@ final class DecodeProxy implements DecodeProxyInterface
 
     public function decodeFont(string $fontName): array
     {
+        if(isset($this->runTimeCache[$fontName])) {
+            return $this->runTimeCache[$fontName];
+        }
+
         if (!is_dir($this->cacheDir)) {
             mkdir($this->cacheDir);
         }
@@ -27,6 +33,8 @@ final class DecodeProxy implements DecodeProxyInterface
             file_put_contents($cacheFile, json_encode($info));
         }
 
-        return json_decode(file_get_contents($cacheFile), true);
+        $this->runTimeCache[$fontName] = json_decode(file_get_contents($cacheFile), true);
+
+        return $this->runTimeCache[$fontName];
     }
 }
