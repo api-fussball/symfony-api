@@ -75,6 +75,7 @@ class DecodeTest extends TestCase
         $mockHttpClient = $this->createMock(HttpClientInterface::class);
         $mockHttpClient->method('request')
             ->willReturn($mockResponse);
+
         return $mockHttpClient;
     }
 

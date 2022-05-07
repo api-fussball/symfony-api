@@ -46,6 +46,25 @@ class ApiTest extends WebTestCase
         $responseRequest = json_decode($response->getContent(), true);
 
         self::assertArrayHasKey('data', $responseRequest);
+
+        $data = $responseRequest['data'];
+        self::assertCount(10, $data);
+
+        $teams = [];
+        $score = 0;
+        foreach ($data as $info) {
+            $teams[] = $info['homeTeam'];
+            $teams[] = $info['awayTeam'];
+
+            $score += (int)$info['homeScore'];
+            $score += (int)$info['awayScore'];
+
+            self::assertSame(10, strlen($info['date']));
+            self::assertSame(5, strlen($info['time']));
+        }
+
+        $teams = array_unique($teams);
+        self::assertTrue(in_array('Fühlingen', $teams));
     }
 
 }
