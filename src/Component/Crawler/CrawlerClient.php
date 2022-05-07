@@ -3,6 +3,10 @@
 namespace App\Component\Crawler;
 
 use App\Component\Crawler\Bridge\HttpClientInterface;
+use DOMDocument;
+use DOMNodeList;
+use DOMXPath;
+use RuntimeException;
 
 final class CrawlerClient implements CrawlerClientInterface
 {
@@ -12,24 +16,20 @@ final class CrawlerClient implements CrawlerClientInterface
     {
     }
 
-    public function get(string $url, string $xpathExpression): \DOMNodeList
+    public function get(string $url, string $xpathExpression): DOMNodeList
     {
         $html = $this->httpClient->getHtml($url);
 
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
 
-        /**
-         * $html is no empty, i check this in getHtml Method
-         * @psalm-suppress ArgumentTypeCoercion
-         */
         $dom->loadHTML($html);
 
-        $xpath = new \DOMXPath($dom);
+        $xpath = new DOMXPath($dom);
 
         $domNodeList = $xpath->query($xpathExpression);
 
-        if(!$domNodeList instanceof \DOMNodeList || $domNodeList->length === 0) {
-            throw new \RuntimeException('Empty');
+        if(!$domNodeList instanceof DOMNodeList || $domNodeList->length === 0) {
+            throw new RuntimeException('Empty');
         }
 
         return $domNodeList;

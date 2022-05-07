@@ -4,7 +4,6 @@ namespace App\Component\FussballDe;
 
 use App\Component\Dto\FussballDeRequest;
 use App\Component\FussballDe\Model\MainInfo\GamesInterface;
-use App\Component\FussballDe\Model\MainInfo\PrevGamesInterface;
 use App\Component\FussballDe\Model\TeamsInfoInterface;
 
 final class FussballDeClient implements FussballDeClientInterface

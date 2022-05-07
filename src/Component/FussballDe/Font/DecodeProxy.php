@@ -2,6 +2,7 @@
 
 namespace App\Component\FussballDe\Font;
 
+use RuntimeException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class DecodeProxy implements DecodeProxyInterface
@@ -43,7 +44,7 @@ final class DecodeProxy implements DecodeProxyInterface
 
         $cacheContent = file_get_contents($cacheFile);
         if($cacheContent === false) {
-            throw new \RuntimeException('Font not found');
+            throw new RuntimeException('Font not found');
         }
 
         $this->runTimeCache[$fontName] = json_decode($cacheContent, true, 512, JSON_THROW_ON_ERROR);
@@ -63,6 +64,6 @@ final class DecodeProxy implements DecodeProxyInterface
             return $cacheDir . '/fonts';
         }
 
-        throw new \RuntimeException('CacheDir not found');
+        throw new RuntimeException('CacheDir not found');
     }
 }

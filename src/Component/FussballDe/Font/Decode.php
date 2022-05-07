@@ -2,6 +2,8 @@
 
 namespace App\Component\FussballDe\Font;
 
+use DOMDocument;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -57,7 +59,7 @@ final class Decode implements DecodeInterface
 
         $convertFile = sprintf(self::CONVERT_FILE, $this->cacheDir, $fontName);
 
-        $domDocument = new \DOMDocument();
+        $domDocument = new DOMDocument();
         $domDocument->load($convertFile);
 
         $mapElement = $domDocument->getElementsByTagName('map');
@@ -90,6 +92,6 @@ final class Decode implements DecodeInterface
             return $cacheDir . '/fonts';
         }
 
-        throw new \RuntimeException('CacheDir not found');
+        throw new RuntimeException('CacheDir not found');
     }
 }

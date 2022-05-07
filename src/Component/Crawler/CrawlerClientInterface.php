@@ -2,7 +2,9 @@
 
 namespace App\Component\Crawler;
 
+use DOMNodeList;
+
 interface CrawlerClientInterface
 {
-    public function get(string $url, string $xpathExpression): \DOMNodeList;
+    public function get(string $url, string $xpathExpression): DOMNodeList;
 }

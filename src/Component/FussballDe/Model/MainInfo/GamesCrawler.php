@@ -5,6 +5,10 @@ namespace App\Component\FussballDe\Model\MainInfo;
 use App\Component\Crawler\Bridge\HttpClientInterface;
 use App\Component\Dto\ClubMatchInfoTransfer;
 use App\Component\FussballDe\Font\DecodeProxyInterface;
+use DOMDocument;
+use DOMNodeList;
+use DOMXPath;
+use RuntimeException;
 
 final class GamesCrawler implements GamesCrawlerInterface
 {
@@ -28,22 +32,15 @@ final class GamesCrawler implements GamesCrawlerInterface
             $url
         );
 
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
 
-        /**
-         * $html is no empty, i check this in getHtml Method
-         * @psalm-suppress ArgumentTypeCoercion
-         */
         $dom->loadHTML(str_replace('&#', '', $html));
 
         $clubMatchInfoTransferList = [];
 
         $clubMatchInfoTransferList = $this->addDateAndCompetitionInfo($dom, $clubMatchInfoTransferList);
 
-        $this->addScoreInfo($dom, $clubMatchInfoTransferList);
-
-
-        return $clubMatchInfoTransferList;
+        return $this->addScoreInfo($dom, $clubMatchInfoTransferList);
     }
 
     /**
@@ -52,7 +49,7 @@ final class GamesCrawler implements GamesCrawlerInterface
      *
      * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
-    private function addDateAndCompetitionInfo(\DOMDocument $dom, array $clubMatchInfoTransferList): array
+    private function addDateAndCompetitionInfo(DOMDocument $dom, array $clubMatchInfoTransferList): array
     {
         $matchDateAndCompetitionInfo = $this->getNodeListByClass($dom, 'visible-small');
 
@@ -100,7 +97,7 @@ final class GamesCrawler implements GamesCrawlerInterface
      *
      * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
-    private function addScoreInfo(\DOMDocument $dom, array $clubMatchInfoTransferList): array
+    private function addScoreInfo(DOMDocument $dom, array $clubMatchInfoTransferList): array
     {
         $matchScore = $this->getNodeListByClass($dom, 'column-score');
 
@@ -123,9 +120,9 @@ final class GamesCrawler implements GamesCrawlerInterface
             $result = trim($info->nodeValue);
 
             if (str_contains($result, ':')) {
-                /** @var \DOMElement $firstChlid */
-                $firstChlid = $info->childNodes[1]->firstChild;
-                $decodeFontName = $firstChlid->getAttribute('data-obfuscation');
+                /** @var \DOMElement $firstChildNodes */
+                $firstChildNodes = $info->childNodes[1]->firstChild;
+                $decodeFontName = $firstChildNodes->getAttribute('data-obfuscation');
                 $fontInfo = $this->decodeProxy->decodeFont($decodeFontName);
 
                 $scoreInfo = explode(':', $result);
@@ -139,16 +136,15 @@ final class GamesCrawler implements GamesCrawlerInterface
         return $clubMatchInfoTransferList;
     }
 
-    private function getNodeListByClass(\DOMDocument $dom, string $class, ?\DOMNode $contextNode = null): \DOMNodeList
+    private function getNodeListByClass(DOMDocument $dom, string $class): DOMNodeList
     {
-        $xpath = new \DOMXPath($dom);
+        $xpath = new DOMXPath($dom);
         $domNodeList = $xpath->query(
             sprintf(self::XPATH, $class),
-            $contextNode
         );
 
-        if (!$domNodeList instanceof \DOMNodeList || $domNodeList->length === 0) {
-            throw new \RuntimeException('Empty');
+        if (!$domNodeList instanceof DOMNodeList || $domNodeList->length === 0) {
+            throw new RuntimeException('Empty');
         }
         return $domNodeList;
     }
