@@ -5,6 +5,7 @@ namespace App\Component\FussballDe\Font;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+
 final class Decode implements DecodeInterface
 {
     private const MAP = [
@@ -51,6 +52,7 @@ final class Decode implements DecodeInterface
         $fontWoff = sprintf(self::FONT_FILE_PATH, $this->cacheDir, $fontName);
         file_put_contents($fontWoff, $response->getContent());
 
+        /** @psalm-suppress ForbiddenCode */
         shell_exec(sprintf(self::SHELL_COMMAND, $this->cacheDir, $fontWoff));
 
         $convertFile = sprintf(self::CONVERT_FILE, $this->cacheDir, $fontName);

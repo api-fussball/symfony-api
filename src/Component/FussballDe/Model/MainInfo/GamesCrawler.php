@@ -4,7 +4,6 @@ namespace App\Component\FussballDe\Model\MainInfo;
 
 use App\Component\Crawler\Bridge\HttpClientInterface;
 use App\Component\Dto\ClubMatchInfoTransfer;
-use App\Component\Dto\FussballDeRequest;
 use App\Component\FussballDe\Font\DecodeProxyInterface;
 
 final class GamesCrawler implements GamesCrawlerInterface
@@ -76,7 +75,7 @@ final class GamesCrawler implements GamesCrawlerInterface
             }
 
             $text = strstr($nodeValue, '|');
-            if($text) {
+            if ($text) {
                 $text = substr($text, 2);
                 $competitionInfo = explode(
                     ' | ',
@@ -107,8 +106,11 @@ final class GamesCrawler implements GamesCrawlerInterface
 
         /** @var \DOMElement $info */
         foreach ($matchScore as $key => $info) {
+            /** @var \DOMElement $previousElementSibling */
+            $previousElementSibling = $info->previousElementSibling;
+
             /** @var \DOMElement $matchInfo */
-            $matchInfo = $info->previousElementSibling->getElementsByTagName('span')[0];
+            $matchInfo = $previousElementSibling->getElementsByTagName('span')[0];
 
             $clubMatchInfoTransferList[$key]->awayTeam = utf8_decode($matchInfo->getAttribute('data-alt'));
             $clubMatchInfoTransferList[$key]->awayLogo = 'https:' . $matchInfo->getAttribute('data-responsive-image');
@@ -121,7 +123,9 @@ final class GamesCrawler implements GamesCrawlerInterface
             $result = trim($info->nodeValue);
 
             if (str_contains($result, ':')) {
-                $decodeFontName = $info->childNodes[1]->firstChild->getAttribute('data-obfuscation');
+                /** @var \DOMElement $firstChlid */
+                $firstChlid = $info->childNodes[1]->firstChild;
+                $decodeFontName = $firstChlid->getAttribute('data-obfuscation');
                 $fontInfo = $this->decodeProxy->decodeFont($decodeFontName);
 
                 $scoreInfo = explode(':', $result);
@@ -129,6 +133,7 @@ final class GamesCrawler implements GamesCrawlerInterface
                 $clubMatchInfoTransferList[$key]->homeScore = $this->getScore($scoreInfo[0], $fontInfo);
                 $clubMatchInfoTransferList[$key]->awayScore = $this->getScore($scoreInfo[1], $fontInfo);
             }
+
         }
 
         return $clubMatchInfoTransferList;
