@@ -6,7 +6,31 @@ use App\Component\Dto\FussballDeRequest;
 
 interface GamesInterface
 {
-    public function getPrevGames(FussballDeRequest $fussballDeRequest);
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
+     */
+    public function getPrevGames(FussballDeRequest $fussballDeRequest): array;
 
-    public function getNextGames(FussballDeRequest $fussballDeRequest);
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
+     */
+    public function getNextGames(FussballDeRequest $fussballDeRequest): array;
+
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
+     */
+    public function getNextTeamGames(FussballDeRequest $fussballDeRequest): array;
+
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
+     */
+    public function getPrevTeamGames(FussballDeRequest $fussballDeRequest): array;
 }

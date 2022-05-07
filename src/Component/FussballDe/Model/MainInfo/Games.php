@@ -14,7 +14,12 @@ final class Games implements GamesInterface
     {
     }
 
-    public function getPrevGames(FussballDeRequest $fussballDeRequest)
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
+     */
+    public function getPrevGames(FussballDeRequest $fussballDeRequest): array
     {
         $url = sprintf(
             '/ajax.club.prev.games/-/id/%s/mode/PAGE',
@@ -25,7 +30,12 @@ final class Games implements GamesInterface
         );
     }
 
-    public function getNextGames(FussballDeRequest $fussballDeRequest)
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
+     */
+    public function getNextGames(FussballDeRequest $fussballDeRequest): array
     {
         $url = sprintf(
             '/ajax.club.next.games/-/id/%s/mode/PAGE',
@@ -36,5 +46,36 @@ final class Games implements GamesInterface
         );
     }
 
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
+     */
+    public function getPrevTeamGames(FussballDeRequest $fussballDeRequest): array
+    {
+        $url = sprintf(
+            '/ajax.team.prev.games/-/mode/PAGE/team-id/%s',
+            $fussballDeRequest->id
+        );
+        return $this->gamesCrawler->get(
+            $url
+        );
+    }
+
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
+     */
+    public function getNextTeamGames(FussballDeRequest $fussballDeRequest): array
+    {
+        $url = sprintf(
+            '/ajax.team.next.games/-/mode/PAGE/team-id/%s',
+            $fussballDeRequest->id
+        );
+        return $this->gamesCrawler->get(
+            $url
+        );
+    }
 
 }

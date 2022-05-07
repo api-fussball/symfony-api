@@ -7,7 +7,7 @@ interface GamesCrawlerInterface
     /**
      * @param string $url
      *
-     * @return array
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
     public function get(string $url): array;
 }
