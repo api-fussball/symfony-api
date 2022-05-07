@@ -64,7 +64,44 @@ class ApiTest extends WebTestCase
         }
 
         $teams = array_unique($teams);
+
+        self::assertGreaterThan(0, $score);
         self::assertTrue(in_array('Fühlingen', $teams));
     }
 
+    public function testNextGames()
+    {
+        $this->client->request('GET', '/api/club/next_games/00ES8GN91400002IVV0AG08LVUPGND5I');
+
+        self::assertResponseStatusCodeSame(200);
+
+        $response = $this->client->getResponse();
+
+        self::assertTrue($response->headers->contains('Content-Type', 'application/json'));
+
+        $responseRequest = json_decode($response->getContent(), true);
+
+        self::assertArrayHasKey('data', $responseRequest);
+
+        $data = $responseRequest['data'];
+        self::assertCount(10, $data);
+
+        $teams = [];
+        $score = 0;
+        foreach ($data as $info) {
+            $teams[] = $info['homeTeam'];
+            $teams[] = $info['awayTeam'];
+
+            $score += (int)$info['homeScore'];
+            $score += (int)$info['awayScore'];
+
+            self::assertSame(10, strlen($info['date']));
+            self::assertSame(5, strlen($info['time']));
+        }
+
+        $teams = array_unique($teams);
+        self::assertTrue(in_array('Fühlingen', $teams));
+
+        self::assertSame(0, $score);
+    }
 }

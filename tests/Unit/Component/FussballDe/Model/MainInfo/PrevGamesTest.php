@@ -8,8 +8,6 @@ use App\Component\FussballDe\Font\DecodeProxyInterface;
 use App\Component\FussballDe\Model\MainInfo\Games;
 use App\Component\FussballDe\Model\MainInfo\GamesCrawler;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PrevGamesTest extends TestCase
 {
@@ -57,15 +55,5 @@ class PrevGamesTest extends TestCase
         self::assertSame('Vingst 05 II',$seniorGame->homeTeam);
         self::assertSame('01.05.2022',$seniorGame->date);
         self::assertSame('13:00',$seniorGame->time);
-    }
-
-    /**
-     * @return \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface
-     */
-    private function getParameterBagMock(): ParameterBagInterface
-    {
-        return new ParameterBag([
-            'kernel.cache_dir' => __DIR__ ,
-        ]);
     }
 }

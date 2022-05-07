@@ -7,4 +7,6 @@ use App\Component\Dto\FussballDeRequest;
 interface GamesInterface
 {
     public function getPrevGames(FussballDeRequest $fussballDeRequest);
+
+    public function getNextGames(FussballDeRequest $fussballDeRequest);
 }

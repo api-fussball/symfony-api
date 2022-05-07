@@ -25,5 +25,16 @@ final class Games implements GamesInterface
         );
     }
 
+    public function getNextGames(FussballDeRequest $fussballDeRequest)
+    {
+        $url = sprintf(
+            '/ajax.club.next.games/-/id/%s/mode/PAGE',
+            $fussballDeRequest->id
+        );
+        return $this->gamesCrawler->get(
+            $url
+        );
+    }
+
 
 }

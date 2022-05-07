@@ -37,6 +37,14 @@ final class FussballDeClient implements FussballDeClientInterface
         return $this->gamesCrawler->getPrevGames($fussballDeRequest);
     }
 
-
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubTeamInfoTransfer[]
+     */
+    public function nextClubGames(FussballDeRequest $fussballDeRequest): array
+    {
+        return $this->gamesCrawler->getNextGames($fussballDeRequest);
+    }
 
 }

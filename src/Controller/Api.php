@@ -43,4 +43,17 @@ class Api
 
         return new JsonResponse(['data' => $clubInfoTransferList]);
     }
+
+    /**
+     * @Route("/club/next_games/{id}", name="api_club_next_games")
+     */
+    public function clubNextGames(string $id): JsonResponse
+    {
+        $clubInfoTransfer = new FussballDeRequest();
+        $clubInfoTransfer->id = $id;
+
+        $clubInfoTransferList = $this->fussballDeClient->nextClubGames($clubInfoTransfer);
+
+        return new JsonResponse(['data' => $clubInfoTransferList]);
+    }
 }
