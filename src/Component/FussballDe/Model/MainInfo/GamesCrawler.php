@@ -19,7 +19,7 @@ final class GamesCrawler implements GamesCrawlerInterface
     }
 
     /**
-     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     * @param string $url
      *
      * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
@@ -49,7 +49,7 @@ final class GamesCrawler implements GamesCrawlerInterface
 
     /**
      * @param \DOMDocument $dom
-     * @param array $clubMatchInfoTransferList
+     * @param \App\Component\Dto\ClubMatchInfoTransfer[] $clubMatchInfoTransferList
      *
      * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
@@ -59,24 +59,37 @@ final class GamesCrawler implements GamesCrawlerInterface
 
         /** @var \DOMElement $info */
         foreach ($matchDateAndCompetitionInfo as $key => $info) {
-            $nodeValue = trim($info->nodeValue);
+            $text = $info->nodeValue;
+            if (!is_string($text)) {
+                continue;
+            }
+
+            $nodeValue = trim($text);
 
             $clubMatchInfoTransfer = new ClubMatchInfoTransfer();
 
-            $dateTimeInfo = trim(strstr($nodeValue, '|', true));
+            $dateTimeInfo = strstr($nodeValue, '|', true);
 
-            $clubMatchInfoTransfer->time = substr($dateTimeInfo, -9, 5);
-            $clubMatchInfoTransfer->date = substr($dateTimeInfo, -22, 10);
+            if ($dateTimeInfo) {
+                $clubMatchInfoTransfer->time = substr($dateTimeInfo, -10, 5);
+                $clubMatchInfoTransfer->date = substr($dateTimeInfo, -23, 10);
+            }
 
-            $competitionInfo = explode(
-                ' | ',
-                substr(strstr($nodeValue, '|'), 2)
-            );
+            $text = strstr($nodeValue, '|');
+            if($text) {
+                $text = substr($text, 2);
+                $competitionInfo = explode(
+                    ' | ',
+                    $text
+                );
 
-            $clubMatchInfoTransfer->ageGroup = $competitionInfo[0];
-            $clubMatchInfoTransfer->competition = $competitionInfo[1];
 
-            $clubMatchInfoTransferList[$key] = $clubMatchInfoTransfer;
+                $clubMatchInfoTransfer->ageGroup = $competitionInfo[0];
+                $clubMatchInfoTransfer->competition = $competitionInfo[1];
+
+                $clubMatchInfoTransferList[$key] = $clubMatchInfoTransfer;
+            }
+
         }
 
         return $clubMatchInfoTransferList;
@@ -135,6 +148,12 @@ final class GamesCrawler implements GamesCrawlerInterface
         return $domNodeList;
     }
 
+    /**
+     * @param string $scoreInfo
+     * @param array<string,string> $fontInfo
+     *
+     * @return string
+     */
     private function getScore(string $scoreInfo, array $fontInfo): string
     {
         $scoreHome = array_filter(explode(';', $scoreInfo));

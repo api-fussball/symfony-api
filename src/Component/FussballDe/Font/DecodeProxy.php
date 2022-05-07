@@ -10,13 +10,21 @@ final class DecodeProxy implements DecodeProxyInterface
 
     private string $cacheDir;
 
+    /**
+     * @var array<string, array<string, string>>
+     */
     private array $runTimeCache = [];
 
     public function __construct(private DecodeInterface $decode, ParameterBagInterface $parameterBag)
     {
-        $this->cacheDir = $parameterBag->get('kernel.cache_dir') . '/fonts';
+        $this->cacheDir = $this->getCacheDir($parameterBag);
     }
 
+    /**
+     * @param string $fontName
+     *
+     * @return string[]
+     */
     public function decodeFont(string $fontName): array
     {
         if(isset($this->runTimeCache[$fontName])) {
@@ -33,8 +41,28 @@ final class DecodeProxy implements DecodeProxyInterface
             file_put_contents($cacheFile, json_encode($info));
         }
 
-        $this->runTimeCache[$fontName] = json_decode(file_get_contents($cacheFile), true);
+        $cacheContent = file_get_contents($cacheFile);
+        if($cacheContent === false) {
+            throw new \RuntimeException('Font not found');
+        }
+
+        $this->runTimeCache[$fontName] = json_decode($cacheContent, true, 512, JSON_THROW_ON_ERROR);
 
         return $this->runTimeCache[$fontName];
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface $parameterBag
+     *
+     * @return string
+     */
+    private function getCacheDir(ParameterBagInterface $parameterBag): string
+    {
+        $cacheDir = $parameterBag->get('kernel.cache_dir');
+        if (is_string($cacheDir)) {
+            return $cacheDir . '/fonts';
+        }
+
+        throw new \RuntimeException('CacheDir not found');
     }
 }

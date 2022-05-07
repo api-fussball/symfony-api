@@ -6,8 +6,6 @@ use App\Component\Dto\FussballDeRequest;
 
 final class Games implements GamesInterface
 {
-    private const URL = '/ajax.club.prev.games/-/id/%s/mode/PAGE';
-
     public function __construct(
         private GamesCrawlerInterface $gamesCrawler
     )

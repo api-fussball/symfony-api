@@ -16,14 +16,14 @@ interface FussballDeClientInterface
     /**
      * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
      *
-     * @return \App\Component\Dto\ClubTeamInfoTransfer[]
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
     public function prevClubGames(FussballDeRequest $fussballDeRequest): array;
 
     /**
      * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
      *
-     * @return \App\Component\Dto\ClubTeamInfoTransfer[]
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
     public function nextClubGames(FussballDeRequest $fussballDeRequest): array;
 }

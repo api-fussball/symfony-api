@@ -30,13 +30,13 @@ final class Decode implements DecodeInterface
 
     public function __construct(private HttpClientInterface $client, ParameterBagInterface $parameterBag)
     {
-        $this->cacheDir = $parameterBag->get('kernel.cache_dir') . '/fonts';
+        $this->cacheDir = $this->getCacheDir($parameterBag);
     }
 
     /**
      * @param string $fontName
      *
-     * @return array
+     * @return string[]
      */
     public function decodeFont(string $fontName): array
     {
@@ -74,5 +74,20 @@ final class Decode implements DecodeInterface
         unlink($convertFile);
 
         return $info;
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface $parameterBag
+     *
+     * @return string
+     */
+    private function getCacheDir(ParameterBagInterface $parameterBag): string
+    {
+        $cacheDir = $parameterBag->get('kernel.cache_dir');
+        if (is_string($cacheDir)) {
+            return $cacheDir . '/fonts';
+        }
+
+        throw new \RuntimeException('CacheDir not found');
     }
 }

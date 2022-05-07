@@ -3,7 +3,6 @@
 namespace App\Component\FussballDe;
 
 use App\Component\Dto\FussballDeRequest;
-use App\Component\FussballDe\Model\MainInfo\GamesCrawlerInterface;
 use App\Component\FussballDe\Model\MainInfo\GamesInterface;
 use App\Component\FussballDe\Model\MainInfo\PrevGamesInterface;
 use App\Component\FussballDe\Model\TeamsInfoInterface;
@@ -30,7 +29,7 @@ final class FussballDeClient implements FussballDeClientInterface
     /**
      * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
      *
-     * @return \App\Component\Dto\ClubTeamInfoTransfer[]
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
     public function prevClubGames(FussballDeRequest $fussballDeRequest): array
     {
@@ -40,7 +39,7 @@ final class FussballDeClient implements FussballDeClientInterface
     /**
      * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
      *
-     * @return \App\Component\Dto\ClubTeamInfoTransfer[]
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
     public function nextClubGames(FussballDeRequest $fussballDeRequest): array
     {
