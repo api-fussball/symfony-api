@@ -3,6 +3,8 @@
 namespace App\Component\FussballDe;
 
 use App\Component\Dto\FussballDeRequest;
+use App\Component\FussballDe\Model\MainInfo\GamesCrawlerInterface;
+use App\Component\FussballDe\Model\MainInfo\GamesInterface;
 use App\Component\FussballDe\Model\MainInfo\PrevGamesInterface;
 use App\Component\FussballDe\Model\TeamsInfoInterface;
 
@@ -10,7 +12,7 @@ final class FussballDeClient implements FussballDeClientInterface
 {
     public function __construct(
         private TeamsInfoInterface $teamsInfo,
-        private PrevGamesInterface $prevGames,
+        private GamesInterface $gamesCrawler,
     )
     {
     }
@@ -32,7 +34,7 @@ final class FussballDeClient implements FussballDeClientInterface
      */
     public function prevClubGames(FussballDeRequest $fussballDeRequest): array
     {
-        return $this->prevGames->get($fussballDeRequest);
+        return $this->gamesCrawler->getPrevGames($fussballDeRequest);
     }
 
 

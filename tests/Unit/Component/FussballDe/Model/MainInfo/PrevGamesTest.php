@@ -2,18 +2,14 @@
 
 namespace App\Tests\Unit\Component\FussballDe\Model\MainInfo;
 
-use App\Component\Crawler\Bridge\HttpClient;
 use App\Component\Crawler\Bridge\HttpClientInterface;
-use App\Component\Crawler\CrawlerClient;
 use App\Component\Dto\FussballDeRequest;
-use App\Component\FussballDe\Font\Decode;
-use App\Component\FussballDe\Font\DecodeProxy;
 use App\Component\FussballDe\Font\DecodeProxyInterface;
-use App\Component\FussballDe\Model\MainInfo\PrevGames;
+use App\Component\FussballDe\Model\MainInfo\Games;
+use App\Component\FussballDe\Model\MainInfo\GamesCrawler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpClient\CurlHttpClient;
 
 class PrevGamesTest extends TestCase
 {
@@ -27,12 +23,14 @@ class PrevGamesTest extends TestCase
         $decodeProxyStub->method('decodeFont')
             ->willReturn(json_decode(file_get_contents(__DIR__ . '/ap6umsuq.json'), true));
 
-        $prevGames = new PrevGames(
-            $crawlerFaker,
-            $decodeProxyStub
+        $prevGames = new Games(
+            new GamesCrawler(
+                $crawlerFaker,
+                $decodeProxyStub
+            )
         );
 
-        $matchInfo = $prevGames->get(new FussballDeRequest());
+        $matchInfo = $prevGames->getPrevGames(new FussballDeRequest());
 
         self::assertCount(10, $matchInfo);
 

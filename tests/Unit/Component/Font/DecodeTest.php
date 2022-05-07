@@ -3,7 +3,6 @@
 namespace App\Tests\Unit\Component\Font;
 
 use App\Component\FussballDe\Font\Decode;
-use Hoa\Iterator\Directory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

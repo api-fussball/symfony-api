@@ -7,9 +7,8 @@ use App\Component\Dto\ClubMatchInfoTransfer;
 use App\Component\Dto\FussballDeRequest;
 use App\Component\FussballDe\Font\DecodeProxyInterface;
 
-final class PrevGames implements PrevGamesInterface
+final class GamesCrawler implements GamesCrawlerInterface
 {
-    private const URL = '/ajax.club.prev.games/-/id/%s/mode/PAGE';
     private const XPATH = '//*[contains(@class, "%s")]';
 
     public function __construct(
@@ -24,10 +23,10 @@ final class PrevGames implements PrevGamesInterface
      *
      * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
-    public function get(FussballDeRequest $fussballDeRequest): array
+    public function get(string $url): array
     {
         $html = $this->crawlerClient->getHtml(
-            $this->getUrl($fussballDeRequest)
+            $url
         );
 
         $dom = new \DOMDocument();
@@ -120,14 +119,6 @@ final class PrevGames implements PrevGamesInterface
         }
 
         return $clubMatchInfoTransferList;
-    }
-
-    private function getUrl(FussballDeRequest $fussballDeRequest): string
-    {
-        return sprintf(
-            self::URL,
-            $fussballDeRequest->id
-        );
     }
 
     private function getNodeListByClass(\DOMDocument $dom, string $class, ?\DOMNode $contextNode = null): \DOMNodeList
