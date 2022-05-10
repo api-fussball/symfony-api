@@ -23,10 +23,9 @@ class Api
      */
     public function club(string $id): JsonResponse
     {
-        $clubInfoTransfer = new FussballDeRequest();
-        $clubInfoTransfer->id = $id;
-
-        $clubInfoTransferList = $this->fussballDeClient->teamsInfo($clubInfoTransfer);
+        $clubInfoTransferList = $this->fussballDeClient->teamsInfo(
+            $this->getFussballDeRequest($id)
+        );
 
         return new JsonResponse(['data' => $clubInfoTransferList]);
     }
@@ -36,10 +35,9 @@ class Api
      */
     public function clubPrevGames(string $id): JsonResponse
     {
-        $clubInfoTransfer = new FussballDeRequest();
-        $clubInfoTransfer->id = $id;
-
-        $clubInfoTransferList = $this->fussballDeClient->prevClubGames($clubInfoTransfer);
+        $clubInfoTransferList = $this->fussballDeClient->prevClubGames(
+            $this->getFussballDeRequest($id)
+        );
 
         return new JsonResponse(['data' => $clubInfoTransferList]);
     }
@@ -49,11 +47,44 @@ class Api
      */
     public function clubNextGames(string $id): JsonResponse
     {
-        $clubInfoTransfer = new FussballDeRequest();
-        $clubInfoTransfer->id = $id;
-
-        $clubInfoTransferList = $this->fussballDeClient->nextClubGames($clubInfoTransfer);
+        $clubInfoTransferList = $this->fussballDeClient->nextClubGames(
+            $this->getFussballDeRequest($id)
+        );
 
         return new JsonResponse(['data' => $clubInfoTransferList]);
+    }
+
+    /**
+     * @Route("/team/prev_games/{id}", name="api_team_prev_games")
+     */
+    public function teamPrevGames(string $id): JsonResponse
+    {
+        $teamInfoTransferList = $this->fussballDeClient->prevTeamGames(
+            $this->getFussballDeRequest($id)
+        );
+
+        return new JsonResponse(['data' => $teamInfoTransferList]);
+    }
+
+    /**
+     * @Route("/team/next_games/{id}", name="api_team_next_games")
+     */
+    public function teamNextGames(string $id): JsonResponse
+    {
+        $teamInfoTransferList = $this->fussballDeClient->nextTeamGames(
+            $this->getFussballDeRequest($id)
+        );
+
+        return new JsonResponse(['data' => $teamInfoTransferList]);
+    }
+
+    private function getFussballDeRequest(string $id): FussballDeRequest
+    {
+        $id = str_replace('#!', '', $id);
+
+        $fussballDeRequest = new FussballDeRequest();
+        $fussballDeRequest->id = $id;
+
+        return $fussballDeRequest;
     }
 }

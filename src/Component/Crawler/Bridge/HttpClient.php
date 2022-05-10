@@ -13,15 +13,16 @@ final class HttpClient implements HttpClientInterface
 
     public function getHtml(string $url): string
     {
+        $url = 'https://fussball.de' . $url;
         $response = $this->client->request(
             'GET',
-            'https://fussball.de' . $url
+            $url
         );
 
         $content = $response->getContent();
 
         if(empty($content)) {
-            throw new RuntimeException('Empty Content');
+            throw new RuntimeException('Empty Content for url:' . $url);
         }
 
         return $content;

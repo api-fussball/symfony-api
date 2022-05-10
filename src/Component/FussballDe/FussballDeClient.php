@@ -32,7 +32,7 @@ final class FussballDeClient implements FussballDeClientInterface
      */
     public function prevClubGames(FussballDeRequest $fussballDeRequest): array
     {
-        return $this->gamesCrawler->getPrevGames($fussballDeRequest);
+        return $this->gamesCrawler->getPrevClubGames($fussballDeRequest);
     }
 
     /**
@@ -42,7 +42,26 @@ final class FussballDeClient implements FussballDeClientInterface
      */
     public function nextClubGames(FussballDeRequest $fussballDeRequest): array
     {
-        return $this->gamesCrawler->getNextGames($fussballDeRequest);
+        return $this->gamesCrawler->getNextClubGames($fussballDeRequest);
     }
 
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
+     */
+    public function prevTeamGames(FussballDeRequest $fussballDeRequest): array
+    {
+        return $this->gamesCrawler->getPrevTeamGames($fussballDeRequest);
+    }
+
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\ClubMatchInfoTransfer[]
+     */
+    public function nextTeamGames(FussballDeRequest $fussballDeRequest): array
+    {
+        return $this->gamesCrawler->getNextTeamGames($fussballDeRequest);
+    }
 }

@@ -79,9 +79,15 @@ final class GamesCrawler implements GamesCrawlerInterface
                     $text
                 );
 
+                if (count($competitionInfo) === 2) {
+                    $clubMatchInfoTransfer->ageGroup = $competitionInfo[0];
+                    $clubMatchInfoTransfer->competition = $competitionInfo[1];
+                }
 
-                $clubMatchInfoTransfer->ageGroup = $competitionInfo[0];
-                $clubMatchInfoTransfer->competition = $competitionInfo[1];
+                if (count($competitionInfo) === 1) {
+                    $clubMatchInfoTransfer->competition = $competitionInfo[0];
+                }
+
 
                 $clubMatchInfoTransferList[$key] = $clubMatchInfoTransfer;
             }

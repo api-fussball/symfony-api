@@ -11,14 +11,14 @@ interface GamesInterface
      *
      * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
-    public function getPrevGames(FussballDeRequest $fussballDeRequest): array;
+    public function getPrevClubGames(FussballDeRequest $fussballDeRequest): array;
 
     /**
      * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
      *
      * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
-    public function getNextGames(FussballDeRequest $fussballDeRequest): array;
+    public function getNextClubGames(FussballDeRequest $fussballDeRequest): array;
 
     /**
      * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest

@@ -17,7 +17,7 @@ final class Games implements GamesInterface
      *
      * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
-    public function getPrevGames(FussballDeRequest $fussballDeRequest): array
+    public function getPrevClubGames(FussballDeRequest $fussballDeRequest): array
     {
         $url = sprintf(
             '/ajax.club.prev.games/-/id/%s/mode/PAGE',
@@ -33,7 +33,7 @@ final class Games implements GamesInterface
      *
      * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
-    public function getNextGames(FussballDeRequest $fussballDeRequest): array
+    public function getNextClubGames(FussballDeRequest $fussballDeRequest): array
     {
         $url = sprintf(
             '/ajax.club.next.games/-/id/%s/mode/PAGE',

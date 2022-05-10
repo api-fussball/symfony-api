@@ -28,7 +28,7 @@ class NextGamesTest extends TestCase
             )
         );
 
-        $matchInfo = $prevGames->getPrevGames(new FussballDeRequest());
+        $matchInfo = $prevGames->getPrevClubGames(new FussballDeRequest());
 
         self::assertCount(10, $matchInfo);
 
