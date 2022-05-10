@@ -8,18 +8,17 @@ use App\Component\FussballDe\Font\DecodeProxyInterface;
 use App\Component\FussballDe\Model\MainInfo\Games;
 use App\Component\FussballDe\Model\MainInfo\GamesCrawler;
 use PHPUnit\Framework\TestCase;
-
-class PrevGamesTest extends TestCase
+class PrevTeamGamesTest extends TestCase
 {
     public function test()
     {
         $crawlerFaker = $this->createStub(HttpClientInterface::class);
         $crawlerFaker->method('getHtml')
-            ->willReturn(file_get_contents(__DIR__ . '/../../../../../_data/prev_games.html'));
+            ->willReturn(file_get_contents(__DIR__ . '/../../../../../_data/prev_team_games.html'));
 
         $decodeProxyStub = $this->createStub(DecodeProxyInterface::class);
         $decodeProxyStub->method('decodeFont')
-            ->willReturn(json_decode(file_get_contents(__DIR__ . '/ap6umsuq.json'), true));
+            ->willReturn(json_decode(file_get_contents(__DIR__ . '/mbxdus9j.json'), true));
 
         $prevGames = new Games(
             new GamesCrawler(
@@ -33,12 +32,13 @@ class PrevGamesTest extends TestCase
         self::assertCount(10, $matchInfo);
 
         $firstGame = $matchInfo[0];
-        self::assertSame('0',$firstGame->homeScore);
-        self::assertSame('1',$firstGame->awayScore);
+        dump($firstGame);
+        self::assertSame('3',$firstGame->homeScore);
+        self::assertSame('3',$firstGame->awayScore);
         self::assertSame('https://www.fussball.de/export.media/-/action/getLogo/format/3/id/00ES8GN91400002IVV0AG08LVUPGND5I',$firstGame->homeLogo);
         self::assertSame('https://www.fussball.de/export.media/-/action/getLogo/format/3/id/00ES8GN91400003QVV0AG08LVUPGND5I',$firstGame->awayLogo);
         self::assertSame('1.Kreisklasse',$firstGame->competition);
-        self::assertSame('E-Junioren',$firstGame->ageGroup);
+        self::assertSame('',$firstGame->ageGroup);
         self::assertSame('1. JFS Köln U10 II',$firstGame->awayTeam);
         self::assertSame('Fühlingen U10',$firstGame->homeTeam);
         self::assertSame('30.04.2022',$firstGame->date);
