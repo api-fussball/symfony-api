@@ -41,7 +41,7 @@ class ApiTest extends WebTestCase
 
         $this->checkDate($data);
         $this->checkTime($data);
-        $this->checkTeam($data);
+        $this->checkTeam($data, 'Fühlingen I');
 
         $score = $this->getScore($data);
         self::assertGreaterThan(0, $score);
@@ -56,7 +56,7 @@ class ApiTest extends WebTestCase
 
         $this->checkDate($data);
         $this->checkTime($data);
-        $this->checkTeam($data);
+        $this->checkTeam($data, 'Fühlingen I');
 
         $score = $this->getScore($data);
         self::assertSame(0, $score);
@@ -104,7 +104,7 @@ class ApiTest extends WebTestCase
         return $score;
     }
 
-    private function checkTeam(array $data): void
+    private function checkTeam(array $data, string $expectedTeam = 'Fühlingen'): void
     {
         $teams = [];
 
@@ -114,7 +114,7 @@ class ApiTest extends WebTestCase
         }
 
         $teams = array_unique($teams);
-        self::assertTrue(in_array('Fühlingen', $teams));
+        self::assertTrue(in_array($expectedTeam, $teams));
     }
 
     private function checkDate(array $data): void
