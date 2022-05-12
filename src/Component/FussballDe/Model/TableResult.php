@@ -7,13 +7,10 @@ use App\Component\Dto\FussballDeRequest;
 use App\Component\Dto\TeamTableTransfer;
 use DOMDocument;
 use DOMNodeList;
-use DOMXPath;
-use RuntimeException;
 
 final class TableResult
 {
     private const URL = '/ajax.team.table/-/team-id/%s';
-    private const XPATH = '//*[contains(@class, "%s")]';
 
     public function __construct(
         private HttpClientInterface $crawlerClient,
@@ -45,7 +42,7 @@ final class TableResult
 
             $tableTeamInfo = new TeamTableTransfer();
 
-            $this->addReletagionAndPromotionInfo($childNode, $tableTeamInfo);
+            $this->addRelegationAndPromotionInfo($childNode, $tableTeamInfo);
 
             $trInfoList = $childNode->getElementsByTagName('td');
 
@@ -72,7 +69,7 @@ final class TableResult
         return $tableTeamInfoList;
     }
 
-    private function addReletagionAndPromotionInfo(\DOMElement $childNode, TeamTableTransfer $tableTeamInfo): void
+    private function addRelegationAndPromotionInfo(\DOMElement $childNode, TeamTableTransfer $tableTeamInfo): void
     {
         $className = $childNode->getAttribute('class');
 
