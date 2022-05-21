@@ -11,11 +11,6 @@ final class DecodeProxy implements DecodeProxyInterface
 
     private string $cacheDir;
 
-    /**
-     * @var array<string, array<string, string>>
-     */
-    private array $runTimeCache = [];
-
     public function __construct(private DecodeInterface $decode, ParameterBagInterface $parameterBag)
     {
         $this->cacheDir = $this->getCacheDir($parameterBag);
@@ -28,10 +23,6 @@ final class DecodeProxy implements DecodeProxyInterface
      */
     public function decodeFont(string $fontName): array
     {
-        if(isset($this->runTimeCache[$fontName])) {
-            return $this->runTimeCache[$fontName];
-        }
-
         if (!is_dir($this->cacheDir)) {
             mkdir($this->cacheDir);
         }
@@ -40,16 +31,21 @@ final class DecodeProxy implements DecodeProxyInterface
         if (!file_exists($cacheFile)) {
             $info = $this->decode->decodeFont($fontName);
             file_put_contents($cacheFile, json_encode($info));
+
+            return $info;
         }
 
         $cacheContent = file_get_contents($cacheFile);
         if($cacheContent === false) {
-            throw new RuntimeException('Font not found');
+            return [];
+            //throw new RuntimeException('Font not found');
         }
 
-        $this->runTimeCache[$fontName] = json_decode($cacheContent, true, 512, JSON_THROW_ON_ERROR);
-
-        return $this->runTimeCache[$fontName];
+        try {
+            return json_decode($cacheContent, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return [];
+        }
     }
 
     /**
