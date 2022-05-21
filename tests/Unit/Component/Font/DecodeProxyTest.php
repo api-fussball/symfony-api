@@ -75,6 +75,6 @@ class DecodeProxyTest extends TestCase
         );
 
         self::assertDirectoryExists(__DIR__ . '/tmp/fonts');
-        self::assertFileEquals(__DIR__ . '/tmp/fonts/unit-font-file.json', json_encode([1,2,3,4]));
+        self::assertStringEqualsFile(__DIR__ . '/tmp/fonts/unit-font-file.json', json_encode([1,2,3,4]));
     }
 }
