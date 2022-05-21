@@ -14,6 +14,11 @@ final class GamesCrawler implements GamesCrawlerInterface
 {
     private const XPATH = '//*[contains(@class, "%s")]';
 
+    /**
+     * @var string[]
+     */
+    private array $decodeFont = [];
+
     public function __construct(
         private HttpClientInterface  $crawlerClient,
         private DecodeProxyInterface $decodeProxy,
@@ -107,6 +112,7 @@ final class GamesCrawler implements GamesCrawlerInterface
     {
         $matchScore = $this->getNodeListByClass($dom, 'column-score');
 
+
         /** @var \DOMElement $info */
         foreach ($matchScore as $key => $info) {
             /** @var \DOMElement $previousElementSibling */
@@ -126,11 +132,10 @@ final class GamesCrawler implements GamesCrawlerInterface
             $result = trim($info->nodeValue);
 
             if (str_contains($result, ':')) {
-                /** @var \DOMElement $firstChildNodes */
-                $firstChildNodes = $info->childNodes[1]->firstChild;
-                $decodeFontName = $firstChildNodes->getAttribute('data-obfuscation');
-                $fontInfo = $this->decodeProxy->decodeFont($decodeFontName);
 
+                $fontInfo = $this->getFontInfo($dom);
+
+                $result = str_replace(' v ', '', $result);
                 $scoreInfo = explode(':', $result);
 
                 $clubMatchInfoTransferList[$key]->homeScore = $this->getScore($scoreInfo[0], $fontInfo);
@@ -167,9 +172,36 @@ final class GamesCrawler implements GamesCrawlerInterface
 
         $finalScore = '';
         foreach ($scoreHome as $score) {
-            $finalScore .= $fontInfo[strtolower($score)];
+            $score = strtolower($score);
+            $info = '-';
+            if (isset($fontInfo[$score])) {
+                $info = $fontInfo[strtolower($score)];
+            }
+            $finalScore .= $info;
         }
 
         return $finalScore;
+    }
+
+    /**
+     * @param \DOMDocument $dom
+     *
+     * @return string[]
+     */
+    private function getFontInfo(DOMDocument $dom): array
+    {
+        if (count($this->decodeFont) === 0) {
+            $html = $dom->saveHTML();
+            $findString = 'data-obfuscation="';
+            $pos = strpos($html, $findString);
+
+            $cutHtml = substr($html, $pos + strlen($findString));
+            $pos = strpos($cutHtml, '"');
+
+            $decodeFontName = substr($cutHtml, 0, $pos);
+
+            $this->decodeFont = $this->decodeProxy->decodeFont($decodeFontName);
+        }
+        return $this->decodeFont;
     }
 }

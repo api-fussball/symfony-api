@@ -55,5 +55,9 @@ class PrevGamesTest extends TestCase
         self::assertSame('Vingst 05 II',$seniorGame->homeTeam);
         self::assertSame('01.05.2022',$seniorGame->date);
         self::assertSame('13:00',$seniorGame->time);
+
+        $unclearScoreGame = $matchInfo[9];
+        self::assertSame('-',$unclearScoreGame->homeScore);
+        self::assertSame('1-',$unclearScoreGame->awayScore);
     }
 }
