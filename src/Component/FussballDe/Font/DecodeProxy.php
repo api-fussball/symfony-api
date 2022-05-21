@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 final class DecodeProxy implements DecodeProxyInterface
 {
     private const CACHE_FILE = '%s/%s.json';
+    const DEPTH = 512;
 
     private string $cacheDir;
 
@@ -36,13 +37,14 @@ final class DecodeProxy implements DecodeProxyInterface
         }
 
         $cacheContent = file_get_contents($cacheFile);
-        if($cacheContent === false) {
+
+        if(!is_string($cacheContent)) {
             return [];
             //throw new RuntimeException('Font not found');
         }
 
         try {
-            return json_decode($cacheContent, true, 512, JSON_THROW_ON_ERROR);
+            return json_decode($cacheContent, true, self::DEPTH, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             return [];
         }
