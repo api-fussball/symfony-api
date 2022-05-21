@@ -23,5 +23,7 @@ coverage/
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
+infection/
+
 
 

@@ -26,13 +26,14 @@ final class CrawlerClient implements CrawlerClientInterface
 
         $xpath = new DOMXPath($dom);
 
+        /** @var DOMNodeList $domNodeList */
         $domNodeList = $xpath->query($xpathExpression);
 
-        if(!$domNodeList instanceof DOMNodeList || $domNodeList->length === 0) {
-            throw new RuntimeException('Empty');
+        if ($domNodeList->length > 0) {
+            return $domNodeList;
         }
 
-        return $domNodeList;
+        throw new RuntimeException('Empty');
     }
 
 

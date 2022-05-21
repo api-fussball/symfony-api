@@ -135,7 +135,6 @@ final class GamesCrawler implements GamesCrawlerInterface
 
                 $fontInfo = $this->getFontInfo($dom);
 
-                $result = str_replace(' v ', '', $result);
                 $scoreInfo = explode(':', $result);
 
                 $clubMatchInfoTransferList[$key]->homeScore = $this->getScore($scoreInfo[0], $fontInfo);
@@ -175,7 +174,7 @@ final class GamesCrawler implements GamesCrawlerInterface
             $score = strtolower($score);
             $info = '-';
             if (isset($fontInfo[$score])) {
-                $info = $fontInfo[strtolower($score)];
+                $info = $fontInfo[$score];
             }
             $finalScore .= $info;
         }

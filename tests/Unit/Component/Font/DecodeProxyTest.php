@@ -24,7 +24,7 @@ class DecodeProxyTest extends TestCase
      *
      * @return void
      */
-    public function testWhenKernelCacheDirIsIncorrectFound(): void
+    public function testExceptionWhenKernelCacheDirIsIncorrectFound(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('CacheDir not found');
@@ -33,6 +33,26 @@ class DecodeProxyTest extends TestCase
         $parameterBag = new ParameterBag(['kernel.cache_dir' => false]);
 
         new DecodeProxy($decode, $parameterBag);
+    }
+
+    public function testJsonFromFile(): void
+    {
+        $info = [3,2,1];
+        $decode = $this->createMock(DecodeInterface::class);
+        $decode->expects($this->never())
+            ->method('decodeFont');
+
+        $dir = __DIR__ . '/tmp/fonts';
+        mkdir($dir);
+        file_put_contents($dir . '/abc.json', json_encode($info));
+
+        $parameterBag = new ParameterBag(['kernel.cache_dir' => __DIR__ . '/tmp']);
+
+        $decodeProxy = new DecodeProxy($decode, $parameterBag);
+        self::assertSame(
+            $info,
+            $decodeProxy->decodeFont('abc')
+        );
     }
 
     /**
