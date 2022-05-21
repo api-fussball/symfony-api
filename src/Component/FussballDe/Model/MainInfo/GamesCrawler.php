@@ -192,11 +192,21 @@ final class GamesCrawler implements GamesCrawlerInterface
     {
         if (count($this->decodeFont) === 0) {
             $html = $dom->saveHTML();
+            if(!is_string($html)) {
+                return $this->decodeFont = [];
+            }
             $findString = 'data-obfuscation="';
             $pos = strpos($html, $findString);
 
+            if($pos === false) {
+                return $this->decodeFont = [];
+            }
             $cutHtml = substr($html, $pos + strlen($findString));
             $pos = strpos($cutHtml, '"');
+
+            if($pos === false) {
+                return $this->decodeFont = [];
+            }
 
             $decodeFontName = substr($cutHtml, 0, $pos);
 
