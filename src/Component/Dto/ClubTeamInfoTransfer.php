@@ -4,6 +4,7 @@ namespace App\Component\Dto;
 
 final class ClubTeamInfoTransfer
 {
-    public string $url = '';
+    public string $fussballDeUrl = '';
+    public string $id = '';
     public string $name = '';
 }

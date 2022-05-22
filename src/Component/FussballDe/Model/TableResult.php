@@ -59,7 +59,7 @@ final class TableResult
             $tableTeamInfo->won = (int)$trInfoList[4]->nodeValue;
             $tableTeamInfo->draw = (int)$trInfoList[5]->nodeValue;
             $tableTeamInfo->lost = (int)$trInfoList[6]->nodeValue;
-            $tableTeamInfo->goal = trim($trInfoList[7]->nodeValue);
+            $tableTeamInfo->goal = $trInfoList[7]->nodeValue;
             $tableTeamInfo->goalDifference = (int)$trInfoList[8]->nodeValue;
             $tableTeamInfo->points = (int)$trInfoList[9]->nodeValue;
 
