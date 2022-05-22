@@ -28,7 +28,11 @@ final class FussballDeClientTest extends TestCase
         self::assertSame('Herren - Fühlingen I', $firstSeniorTeam->name);
         self::assertSame(
             '/mannschaft/sv-fuehlingen-sv-fuehlingen-chorweiler-e-v-mittelrhein/-/saison/2122/team-id/011MIC9NDS000000VTVG0001VTR8C1K7',
-            $firstSeniorTeam->url
+            $firstSeniorTeam->fussballDeUrl
+        );
+        self::assertSame(
+            '011MIC9NDS000000VTVG0001VTR8C1K7',
+            $firstSeniorTeam->id
         );
 
         $u14Team = $info[5];
@@ -36,7 +40,11 @@ final class FussballDeClientTest extends TestCase
         self::assertSame('C-Junioren - Fühlingen U14', $u14Team->name);
         self::assertSame(
             '/mannschaft/sv-fuehlingen-u14-sv-fuehlingen-chorweiler-e-v-mittelrhein/-/saison/2122/team-id/011MIAD9JG000000VTVG0001VTR8C1K7',
-            $u14Team->url
+            $u14Team->fussballDeUrl
+        );
+        self::assertSame(
+            '011MIAD9JG000000VTVG0001VTR8C1K7',
+            $u14Team->id
         );
     }
 }

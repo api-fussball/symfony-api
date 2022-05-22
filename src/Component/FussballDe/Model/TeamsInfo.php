@@ -44,8 +44,11 @@ final class TeamsInfo implements TeamsInfoInterface
             }
 
             $clubInfoTransfer = new ClubTeamInfoTransfer();
-            $clubInfoTransfer->url = str_replace('https://www.fussball.de', '', $url);
+            $clubInfoTransfer->fussballDeUrl = str_replace('https://www.fussball.de', '', $url);
             $clubInfoTransfer->name = utf8_decode(trim($teamHtmlInfo->nodeValue));
+
+            $explodeUrl = explode( '/', $url);
+            $clubInfoTransfer->id = end($explodeUrl);
 
             $clubInfo[] = $clubInfoTransfer;
         }
