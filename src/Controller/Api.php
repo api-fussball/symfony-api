@@ -27,7 +27,20 @@ class Api
             $this->getFussballDeRequest($id)
         );
 
-        return new JsonResponse(['data' => $clubInfoTransferList]);
+        $clubInfoTransferListForApi = [];
+        foreach ($clubInfoTransferList as $clubInfoTransfer) {
+            $clubInfoTransferForApi = (array)$clubInfoTransfer;
+            unset($clubInfoTransferForApi['id']);
+
+            $clubInfoTransferForApi['urls'] = [
+                'nextGames' => '/club/next_games/' . $clubInfoTransfer->id,
+                'prevGames' => '/club/prev_games/' . $clubInfoTransfer->id,
+            ];
+
+            $clubInfoTransferListForApi[] = $clubInfoTransferForApi;
+        }
+
+        return new JsonResponse(['data' => $clubInfoTransferListForApi]);
     }
 
     /**
