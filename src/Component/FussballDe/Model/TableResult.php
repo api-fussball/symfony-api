@@ -8,7 +8,7 @@ use App\Component\Dto\TeamTableTransfer;
 use DOMDocument;
 use DOMNodeList;
 
-final class TableResult
+final class TableResult implements TableResultInterface
 {
     private const URL = '/ajax.team.table/-/team-id/%s';
 

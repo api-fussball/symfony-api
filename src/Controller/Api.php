@@ -35,6 +35,7 @@ class Api
             $clubInfoTransferForApi['urls'] = [
                 'nextGames' => '/club/next_games/' . $clubInfoTransfer->id,
                 'prevGames' => '/club/prev_games/' . $clubInfoTransfer->id,
+                'table' => '/club/table/' . $clubInfoTransfer->id,
             ];
 
             $clubInfoTransferListForApi[] = $clubInfoTransferForApi;
@@ -85,6 +86,19 @@ class Api
     public function teamNextGames(string $id): JsonResponse
     {
         $teamInfoTransferList = $this->fussballDeClient->nextTeamGames(
+            $this->getFussballDeRequest($id)
+        );
+
+        return new JsonResponse(['data' => $teamInfoTransferList]);
+    }
+
+
+    /**
+     * @Route("/team/table/{id}", name="api_team_table")
+     */
+    public function teamTable(string $id): JsonResponse
+    {
+        $teamInfoTransferList = $this->fussballDeClient->teamTable(
             $this->getFussballDeRequest($id)
         );
 
