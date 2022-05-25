@@ -16,7 +16,33 @@ class ApiTest extends WebTestCase
         $this->client = static::createClient();
     }
 
+
     public function testClubInfo()
+    {
+        $this->client->request('GET', '/api/club/info/00ES8GN91400002IVV0AG08LVUPGND5I');
+
+        self::assertResponseStatusCodeSame(200);
+
+        $response = $this->client->getResponse();
+
+        self::assertTrue($response->headers->contains('Content-Type', 'application/json'));
+
+        $responseRequest = json_decode($response->getContent(), true);
+
+        self::assertArrayHasKey('data', $responseRequest);
+
+        self::assertArrayHasKey('clubs', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['clubs']);
+
+        self::assertArrayHasKey('prevGames', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['prevGames']);
+
+        self::assertArrayHasKey('nextGames', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['nextGames']);
+
+    }
+
+    public function testClub()
     {
         $this->client->request('GET', '/api/club/00ES8GN91400002IVV0AG08LVUPGND5I');
 
