@@ -30,6 +30,15 @@ class ApiTest extends WebTestCase
 
         self::assertArrayHasKey('data', $responseRequest);
         self::assertSame('Herren - Fühlingen I', $responseRequest['data'][0]['name']);
+
+
+        $clubs = $responseRequest['data'];
+        foreach ($clubs as $club) {
+            $info = explode('/', $club['fussballDeUrl']);
+            $id = end($info);
+            self::assertSame('/club/next_games/' . $id,$club['urls']['nextGames']);
+            self::assertSame('/club/prev_games/' . $id,$club['urls']['prevGames']);
+        }
     }
 
     public function testPrevTeamGames()
