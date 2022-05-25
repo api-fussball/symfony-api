@@ -4,13 +4,15 @@ namespace App\Component\FussballDe;
 
 use App\Component\Dto\FussballDeRequest;
 use App\Component\FussballDe\Model\MainInfo\GamesInterface;
+use App\Component\FussballDe\Model\TableResultInterface;
 use App\Component\FussballDe\Model\TeamsInfoInterface;
 
 final class FussballDeClient implements FussballDeClientInterface
 {
     public function __construct(
-        private TeamsInfoInterface $teamsInfo,
-        private GamesInterface $gamesCrawler,
+        private readonly TeamsInfoInterface   $teamsInfo,
+        private readonly GamesInterface       $gamesCrawler,
+        private readonly TableResultInterface $tableResult
     )
     {
     }
@@ -63,5 +65,15 @@ final class FussballDeClient implements FussballDeClientInterface
     public function nextTeamGames(FussballDeRequest $fussballDeRequest): array
     {
         return $this->gamesCrawler->getNextTeamGames($fussballDeRequest);
+    }
+
+    /**
+     * @param \App\Component\Dto\FussballDeRequest $fussballDeRequest
+     *
+     * @return \App\Component\Dto\TeamTableTransfer[]
+     */
+    public function teamTable(FussballDeRequest $fussballDeRequest): array
+    {
+        return $this->tableResult->get($fussballDeRequest);
     }
 }

@@ -16,7 +16,33 @@ class ApiTest extends WebTestCase
         $this->client = static::createClient();
     }
 
+
     public function testClubInfo()
+    {
+        $this->client->request('GET', '/api/club/info/00ES8GN91400002IVV0AG08LVUPGND5I');
+
+        self::assertResponseStatusCodeSame(200);
+
+        $response = $this->client->getResponse();
+
+        self::assertTrue($response->headers->contains('Content-Type', 'application/json'));
+
+        $responseRequest = json_decode($response->getContent(), true);
+
+        self::assertArrayHasKey('data', $responseRequest);
+
+        self::assertArrayHasKey('clubs', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['clubs']);
+
+        self::assertArrayHasKey('prevGames', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['prevGames']);
+
+        self::assertArrayHasKey('nextGames', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['nextGames']);
+
+    }
+
+    public function testClub()
     {
         $this->client->request('GET', '/api/club/00ES8GN91400002IVV0AG08LVUPGND5I');
 
@@ -36,8 +62,9 @@ class ApiTest extends WebTestCase
         foreach ($clubs as $club) {
             $info = explode('/', $club['fussballDeUrl']);
             $id = end($info);
-            self::assertSame('/club/next_games/' . $id,$club['urls']['nextGames']);
-            self::assertSame('/club/prev_games/' . $id,$club['urls']['prevGames']);
+            self::assertSame('/club/next_games/' . $id, $club['urls']['nextGames']);
+            self::assertSame('/club/prev_games/' . $id, $club['urls']['prevGames']);
+            self::assertSame('/club/table/' . $id, $club['urls']['table']);
         }
     }
 
@@ -99,6 +126,33 @@ class ApiTest extends WebTestCase
 
         $score = $this->getScore($data);
         self::assertSame(0, $score);
+    }
+
+    public function testTable()
+    {
+        $this->client->request('GET', '/api/team/table/011MIC9NDS000000VTVG0001VTR8C1K7');
+
+        $data = $this->getDataFromRequest();
+
+
+        $team = $data[0];
+        self::assertTrue($team['isPromotion']);
+        self::assertFalse($team['isRelegation']);
+        self::assertGreaterThan(0, $team['games']);
+
+        $month = (int)date('m');
+
+        if ($month !== 7) {
+            self::assertGreaterThan(0, $team['goal']);
+            self::assertGreaterThan(0, $team['points']);
+            self::assertGreaterThan(0, $team['goalDifference']);
+        }
+
+        self::assertSame(1, $team['place']);
+
+        $team = end($data);
+        self::assertTrue($team['isRelegation']);
+        self::assertFalse($team['isPromotion']);
     }
 
     private function getScore(array $data): int

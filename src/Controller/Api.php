@@ -19,26 +19,33 @@ class Api
     }
 
     /**
+     * @Route("/club/info/{id}", name="api_club_info")
+     */
+    public function clubInfo(string $id): JsonResponse
+    {
+        $clubInfoTransferListForApi = $this->getInfoTransferListForApi($id);
+
+        $fussballDeRequest = $this->getFussballDeRequest($id);
+
+        $clubPrevGamesInfoTransferList = $this->fussballDeClient->prevClubGames($fussballDeRequest);
+        $clubNextGamesInfoTransferList = $this->fussballDeClient->nextClubGames($fussballDeRequest);
+
+        return new JsonResponse([
+                'data' => [
+                    'clubs' => $clubInfoTransferListForApi,
+                    'prevGames' => $clubPrevGamesInfoTransferList,
+                    'nextGames' => $clubNextGamesInfoTransferList,
+                ],
+            ]
+        );
+    }
+
+    /**
      * @Route("/club/{id}", name="api_club")
      */
     public function club(string $id): JsonResponse
     {
-        $clubInfoTransferList = $this->fussballDeClient->teamsInfo(
-            $this->getFussballDeRequest($id)
-        );
-
-        $clubInfoTransferListForApi = [];
-        foreach ($clubInfoTransferList as $clubInfoTransfer) {
-            $clubInfoTransferForApi = (array)$clubInfoTransfer;
-            unset($clubInfoTransferForApi['id']);
-
-            $clubInfoTransferForApi['urls'] = [
-                'nextGames' => '/club/next_games/' . $clubInfoTransfer->id,
-                'prevGames' => '/club/prev_games/' . $clubInfoTransfer->id,
-            ];
-
-            $clubInfoTransferListForApi[] = $clubInfoTransferForApi;
-        }
+        $clubInfoTransferListForApi = $this->getInfoTransferListForApi($id);
 
         return new JsonResponse(['data' => $clubInfoTransferListForApi]);
     }
@@ -91,6 +98,19 @@ class Api
         return new JsonResponse(['data' => $teamInfoTransferList]);
     }
 
+
+    /**
+     * @Route("/team/table/{id}", name="api_team_table")
+     */
+    public function teamTable(string $id): JsonResponse
+    {
+        $teamInfoTransferList = $this->fussballDeClient->teamTable(
+            $this->getFussballDeRequest($id)
+        );
+
+        return new JsonResponse(['data' => $teamInfoTransferList]);
+    }
+
     private function getFussballDeRequest(string $id): FussballDeRequest
     {
         $id = str_replace('#!', '', $id);
@@ -99,5 +119,32 @@ class Api
         $fussballDeRequest->id = $id;
 
         return $fussballDeRequest;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return array
+     */
+    private function getInfoTransferListForApi(string $id): array
+    {
+        $clubInfoTransferList = $this->fussballDeClient->teamsInfo(
+            $this->getFussballDeRequest($id)
+        );
+
+        $clubInfoTransferListForApi = [];
+        foreach ($clubInfoTransferList as $clubInfoTransfer) {
+            $clubInfoTransferForApi = (array)$clubInfoTransfer;
+            unset($clubInfoTransferForApi['id']);
+
+            $clubInfoTransferForApi['urls'] = [
+                'nextGames' => '/club/next_games/' . $clubInfoTransfer->id,
+                'prevGames' => '/club/prev_games/' . $clubInfoTransfer->id,
+                'table' => '/club/table/' . $clubInfoTransfer->id,
+            ];
+
+            $clubInfoTransferListForApi[] = $clubInfoTransferForApi;
+        }
+        return $clubInfoTransferListForApi;
     }
 }
