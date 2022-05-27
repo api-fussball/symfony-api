@@ -13,9 +13,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class Api
 {
     public function __construct(
-        private FussballDeClientInterface $fussballDeClient,
+        private readonly FussballDeClientInterface $fussballDeClient,
     )
     {
+    }
+
+    /**
+     * @Route("/club/{id}", name="api_club")
+     */
+    public function club(string $id): JsonResponse
+    {
+        $clubInfoTransferListForApi = $this->getInfoTransferListForApi($id);
+
+        return new JsonResponse(['data' => $clubInfoTransferListForApi]);
     }
 
     /**
@@ -38,16 +48,6 @@ class Api
                 ],
             ]
         );
-    }
-
-    /**
-     * @Route("/club/{id}", name="api_club")
-     */
-    public function club(string $id): JsonResponse
-    {
-        $clubInfoTransferListForApi = $this->getInfoTransferListForApi($id);
-
-        return new JsonResponse(['data' => $clubInfoTransferListForApi]);
     }
 
     /**
@@ -75,6 +75,26 @@ class Api
     }
 
     /**
+     * @Route("/team/{id}", name="api_team")
+     */
+    public function team(string $id): JsonResponse
+    {
+        $fussballDeRequest = $this->getFussballDeRequest($id);
+
+        $prevTeamGames = $this->fussballDeClient->prevTeamGames($fussballDeRequest);
+        $nextTeamGames = $this->fussballDeClient->nextTeamGames($fussballDeRequest);
+        $teamTable = $this->fussballDeClient->teamTable($fussballDeRequest);
+
+        return new JsonResponse([
+            'data' => [
+                'prevGames' => $prevTeamGames,
+                'nextGames' => $nextTeamGames,
+                'table' => $teamTable,
+            ],
+        ]);
+    }
+
+    /**
      * @Route("/team/prev_games/{id}", name="api_team_prev_games")
      */
     public function teamPrevGames(string $id): JsonResponse
@@ -97,7 +117,6 @@ class Api
 
         return new JsonResponse(['data' => $teamInfoTransferList]);
     }
-
 
     /**
      * @Route("/team/table/{id}", name="api_team_table")
@@ -141,6 +160,7 @@ class Api
                 'nextGames' => '/club/next_games/' . $clubInfoTransfer->id,
                 'prevGames' => '/club/prev_games/' . $clubInfoTransfer->id,
                 'table' => '/club/table/' . $clubInfoTransfer->id,
+                'allInfo' => '/club/' . $clubInfoTransfer->id,
             ];
 
             $clubInfoTransferListForApi[] = $clubInfoTransferForApi;

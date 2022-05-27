@@ -16,33 +16,7 @@ class ApiTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-
-    public function testClubInfo()
-    {
-        $this->client->request('GET', '/api/club/info/00ES8GN91400002IVV0AG08LVUPGND5I');
-
-        self::assertResponseStatusCodeSame(200);
-
-        $response = $this->client->getResponse();
-
-        self::assertTrue($response->headers->contains('Content-Type', 'application/json'));
-
-        $responseRequest = json_decode($response->getContent(), true);
-
-        self::assertArrayHasKey('data', $responseRequest);
-
-        self::assertArrayHasKey('clubs', $responseRequest['data']);
-        self::assertNotEmpty($responseRequest['data']['clubs']);
-
-        self::assertArrayHasKey('prevGames', $responseRequest['data']);
-        self::assertNotEmpty($responseRequest['data']['prevGames']);
-
-        self::assertArrayHasKey('nextGames', $responseRequest['data']);
-        self::assertNotEmpty($responseRequest['data']['nextGames']);
-
-    }
-
-    public function testClub()
+    public function testClub(): void
     {
         $this->client->request('GET', '/api/club/00ES8GN91400002IVV0AG08LVUPGND5I');
 
@@ -65,40 +39,35 @@ class ApiTest extends WebTestCase
             self::assertSame('/club/next_games/' . $id, $club['urls']['nextGames']);
             self::assertSame('/club/prev_games/' . $id, $club['urls']['prevGames']);
             self::assertSame('/club/table/' . $id, $club['urls']['table']);
+            self::assertSame('/club/' . $id, $club['urls']['allInfo']);
         }
     }
 
-    public function testPrevTeamGames()
+    public function testClubInfo(): void
     {
-        $this->client->request('GET', '/api/team/prev_games/011MIC9NDS000000VTVG0001VTR8C1K7#!');
+        $this->client->request('GET', '/api/club/info/00ES8GN91400002IVV0AG08LVUPGND5I');
 
-        $data = $this->getDataFromRequest();
-        self::assertGreaterThan(0, $data);
+        self::assertResponseStatusCodeSame(200);
 
-        $this->checkDate($data);
-        $this->checkTime($data);
-        $this->checkTeam($data, 'Fühlingen I');
+        $response = $this->client->getResponse();
 
-        $score = $this->getScore($data);
-        self::assertGreaterThan(0, $score);
+        self::assertTrue($response->headers->contains('Content-Type', 'application/json'));
+
+        $responseRequest = json_decode($response->getContent(), true);
+
+        self::assertArrayHasKey('data', $responseRequest);
+
+        self::assertArrayHasKey('clubs', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['clubs']);
+
+        self::assertArrayHasKey('prevGames', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['prevGames']);
+
+        self::assertArrayHasKey('nextGames', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['nextGames']);
     }
 
-    public function testNextTeamGames()
-    {
-        $this->client->request('GET', '/api/team/next_games/011MIC9NDS000000VTVG0001VTR8C1K7');
-
-        $data = $this->getDataFromRequest();
-        self::assertGreaterThan(0, $data);
-
-        $this->checkDate($data);
-        $this->checkTime($data);
-        $this->checkTeam($data, 'Fühlingen I');
-
-        $score = $this->getScore($data);
-        self::assertSame(0, $score);
-    }
-
-    public function testPrevGames()
+    public function testClubPrevGames(): void
     {
         $this->client->request('GET', '/api/club/prev_games/00ES8GN91400002IVV0AG08LVUPGND5I');
 
@@ -113,12 +82,17 @@ class ApiTest extends WebTestCase
         self::assertGreaterThan(0, $score);
     }
 
-    public function testNextGames()
+    public function testClubNextGames(): void
     {
         $this->client->request('GET', '/api/club/next_games/00ES8GN91400002IVV0AG08LVUPGND5I');
 
         $data = $this->getDataFromRequest();
-        //self::assertCount(10, $data);
+
+        // is saison end?
+        $month = (int)date('n');
+        if ($month > 8 && $month < 6) {
+            self::assertCount(10, $data);
+        }
 
         $this->checkDate($data);
         $this->checkTime($data);
@@ -128,7 +102,61 @@ class ApiTest extends WebTestCase
         self::assertSame(0, $score);
     }
 
-    public function testTable()
+    public function testTeam(): void
+    {
+        $this->client->request('GET', '/api/team/011MIC9NDS000000VTVG0001VTR8C1K7#!');
+
+        self::assertResponseStatusCodeSame(200);
+
+        $response = $this->client->getResponse();
+
+        self::assertTrue($response->headers->contains('Content-Type', 'application/json'));
+
+        $responseRequest = json_decode($response->getContent(), true);
+
+        self::assertArrayHasKey('data', $responseRequest);
+
+        self::assertArrayHasKey('table', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['table']);
+
+        self::assertArrayHasKey('prevGames', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['prevGames']);
+
+        self::assertArrayHasKey('nextGames', $responseRequest['data']);
+        self::assertNotEmpty($responseRequest['data']['nextGames']);
+    }
+
+    public function testPrevTeamGames(): void
+    {
+        $this->client->request('GET', '/api/team/prev_games/011MIC9NDS000000VTVG0001VTR8C1K7#!');
+
+        $data = $this->getDataFromRequest();
+        self::assertGreaterThan(0, $data);
+
+        $this->checkDate($data);
+        $this->checkTime($data);
+        $this->checkTeam($data, 'Fühlingen I');
+
+        $score = $this->getScore($data);
+        self::assertGreaterThan(0, $score);
+    }
+
+    public function testNextTeamGames(): void
+    {
+        $this->client->request('GET', '/api/team/next_games/011MIC9NDS000000VTVG0001VTR8C1K7');
+
+        $data = $this->getDataFromRequest();
+        self::assertGreaterThan(0, $data);
+
+        $this->checkDate($data);
+        $this->checkTime($data);
+        $this->checkTeam($data, 'Fühlingen I');
+
+        $score = $this->getScore($data);
+        self::assertSame(0, $score);
+    }
+
+    public function testTeamTable()
     {
         $this->client->request('GET', '/api/team/table/011MIC9NDS000000VTVG0001VTR8C1K7');
 
