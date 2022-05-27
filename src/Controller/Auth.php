@@ -27,7 +27,7 @@ class Auth
         $status = 200;
         $data = [];
 
-        $content = $this->getContent($request);
+        $content = $request->getContent();
         $info = (array)json_decode($content, true);
 
         try {
@@ -56,10 +56,5 @@ class Auth
             ],
             $status
         );
-    }
-
-    private function getContent(Request $request): string
-    {
-        return $request->getContent();
     }
 }
