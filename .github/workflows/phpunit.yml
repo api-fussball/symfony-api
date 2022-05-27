@@ -21,8 +21,20 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: start docker
+        run: docker-compose up -d
+
+      - name: Wait for MySQL
+        run: sleep 3
+
       - name: Install python lib
         run: pip install fonttools
+
+      - name: create database
+        run: php bin/console --env=test doctrine:database:create
+
+      - name: migrate
+        run: php bin/console --env=test doctrine:migrations:migrate --no-interaction
 
       - name: Run test suite
         run: php vendor/bin/phpunit
