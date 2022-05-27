@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: start docker
+        run: docker-compose up -d
+
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
@@ -21,11 +24,8 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: start docker
-        run: docker-compose up -d
-
       - name: Wait for MySQL
-        run: sleep 8
+        run: sleep 3
 
       - name: Install python lib
         run: pip install fonttools
