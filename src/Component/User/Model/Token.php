@@ -7,7 +7,7 @@ use App\Component\User\Persistence\UserEntityManagerInterface;
 
 final class Token implements TokenInterface
 {
-    private const LENGTH = 64;
+    private const LENGTH = 32;
 
     public function __construct(
         private readonly UserEntityManagerInterface $userEntityManager
@@ -17,6 +17,12 @@ final class Token implements TokenInterface
 
     public function save(string $userMail): UserTransfer
     {
+        if (filter_var($userMail, FILTER_VALIDATE_EMAIL) === false) {
+            throw new \RuntimeException(
+                sprintf('Email "%s" is not valid!', $userMail)
+            );
+        }
+
         $userTransfer = new UserTransfer();
 
         $userTransfer->token = bin2hex(random_bytes(self::LENGTH));
