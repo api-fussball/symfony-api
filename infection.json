@@ -14,5 +14,5 @@
     "@default": true
   },
   "initialTestsPhpOptions": "-d xdebug.mode=coverage",
-  "testFrameworkOptions": "--testsuite=Unit"
+  "testFrameworkOptions": "--testsuite=Unit,Integration,Acceptance"
 }
