@@ -19,6 +19,16 @@ class Api
     }
 
     /**
+     * @Route("/club/{id}", name="api_club")
+     */
+    public function club(string $id): JsonResponse
+    {
+        $clubInfoTransferListForApi = $this->getInfoTransferListForApi($id);
+
+        return new JsonResponse(['data' => $clubInfoTransferListForApi]);
+    }
+
+    /**
      * @Route("/club/info/{id}", name="api_club_info")
      */
     public function clubInfo(string $id): JsonResponse
@@ -38,16 +48,6 @@ class Api
                 ],
             ]
         );
-    }
-
-    /**
-     * @Route("/club/{id}", name="api_club")
-     */
-    public function club(string $id): JsonResponse
-    {
-        $clubInfoTransferListForApi = $this->getInfoTransferListForApi($id);
-
-        return new JsonResponse(['data' => $clubInfoTransferListForApi]);
     }
 
     /**
@@ -75,21 +75,29 @@ class Api
     }
 
     /**
-     * @Route("/team/prev_games/{id}", name="api_team_prev_games")
+     * @Route("/team/{id}", name="api_team")
      */
-    public function teamPrevGames(string $id): JsonResponse
+    public function team(string $id): JsonResponse
     {
-        $teamInfoTransferList = $this->fussballDeClient->prevTeamGames(
-            $this->getFussballDeRequest($id)
-        );
+        $fussballDeRequest = $this->getFussballDeRequest($id);
 
-        return new JsonResponse(['data' => $teamInfoTransferList]);
+        $prevTeamGames = $this->fussballDeClient->prevTeamGames($fussballDeRequest);
+        $nextTeamGames = $this->fussballDeClient->nextTeamGames($fussballDeRequest);
+        $teamTable = $this->fussballDeClient->teamTable($fussballDeRequest);
+
+        return new JsonResponse([
+            'data' => [
+                'prevGames' => $prevTeamGames,
+                'nextGames' => $nextTeamGames,
+                'table' => $teamTable,
+            ],
+        ]);
     }
 
     /**
-     * @Route("/team/info/{id}", name="api_team_info")
+     * @Route("/team/prev_games/{id}", name="api_team_prev_games")
      */
-    public function teamInfo(string $id): JsonResponse
+    public function teamPrevGames(string $id): JsonResponse
     {
         $teamInfoTransferList = $this->fussballDeClient->prevTeamGames(
             $this->getFussballDeRequest($id)
@@ -109,7 +117,6 @@ class Api
 
         return new JsonResponse(['data' => $teamInfoTransferList]);
     }
-
 
     /**
      * @Route("/team/table/{id}", name="api_team_table")
