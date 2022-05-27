@@ -39,7 +39,6 @@ class ApiTest extends WebTestCase
 
         self::assertArrayHasKey('nextGames', $responseRequest['data']);
         self::assertNotEmpty($responseRequest['data']['nextGames']);
-
     }
 
     public function testClub()
@@ -65,6 +64,7 @@ class ApiTest extends WebTestCase
             self::assertSame('/club/next_games/' . $id, $club['urls']['nextGames']);
             self::assertSame('/club/prev_games/' . $id, $club['urls']['prevGames']);
             self::assertSame('/club/table/' . $id, $club['urls']['table']);
+            self::assertSame('/club/' . $id, $club['urls']['allInfo']);
         }
     }
 

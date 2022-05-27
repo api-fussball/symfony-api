@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class Api
 {
     public function __construct(
-        private FussballDeClientInterface $fussballDeClient,
+        private readonly FussballDeClientInterface $fussballDeClient,
     )
     {
     }
@@ -87,6 +87,18 @@ class Api
     }
 
     /**
+     * @Route("/team/info/{id}", name="api_team_info")
+     */
+    public function teamInfo(string $id): JsonResponse
+    {
+        $teamInfoTransferList = $this->fussballDeClient->prevTeamGames(
+            $this->getFussballDeRequest($id)
+        );
+
+        return new JsonResponse(['data' => $teamInfoTransferList]);
+    }
+
+    /**
      * @Route("/team/next_games/{id}", name="api_team_next_games")
      */
     public function teamNextGames(string $id): JsonResponse
@@ -141,6 +153,7 @@ class Api
                 'nextGames' => '/club/next_games/' . $clubInfoTransfer->id,
                 'prevGames' => '/club/prev_games/' . $clubInfoTransfer->id,
                 'table' => '/club/table/' . $clubInfoTransfer->id,
+                'allInfo' => '/club/' . $clubInfoTransfer->id,
             ];
 
             $clubInfoTransferListForApi[] = $clubInfoTransferForApi;
