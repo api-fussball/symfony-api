@@ -3188,20 +3188,20 @@
         },
         {
             "name": "symfony/http-client-contracts",
-            "version": "v3.0.1",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client-contracts.git",
-                "reference": "f7525778c712be78ad5b6ca31f47fdcfd404c280"
+                "reference": "fd038f08c623ab5d22b26e9ba35afe8c79071800"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/f7525778c712be78ad5b6ca31f47fdcfd404c280",
-                "reference": "f7525778c712be78ad5b6ca31f47fdcfd404c280",
+                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/fd038f08c623ab5d22b26e9ba35afe8c79071800",
+                "reference": "fd038f08c623ab5d22b26e9ba35afe8c79071800",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.2"
+                "php": ">=8.1"
             },
             "suggest": {
                 "symfony/http-client-implementation": ""
@@ -3209,7 +3209,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "3.0-dev"
+                    "dev-main": "3.1-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -3219,7 +3219,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Contracts\\HttpClient\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Test/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3246,7 +3249,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client-contracts/tree/v3.0.1"
+                "source": "https://github.com/symfony/http-client-contracts/tree/v3.1.0"
             },
             "funding": [
                 {
@@ -3262,7 +3265,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-13T20:10:05+00:00"
+            "time": "2022-04-22T07:30:54+00:00"
         },
         {
             "name": "symfony/http-foundation",
