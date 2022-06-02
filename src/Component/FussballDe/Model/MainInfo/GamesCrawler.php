@@ -5,6 +5,7 @@ namespace App\Component\FussballDe\Model\MainInfo;
 use App\Component\Crawler\Bridge\HttpClientInterface;
 use App\Component\Dto\ClubMatchInfoTransfer;
 use App\Component\FussballDe\Font\DecodeProxyInterface;
+use App\Component\Service\DomXpathService;
 use DOMDocument;
 use DOMNodeList;
 use DOMXPath;
@@ -13,11 +14,6 @@ use RuntimeException;
 final class GamesCrawler implements GamesCrawlerInterface
 {
     private const XPATH = '//*[contains(@class, "%s")]';
-
-    /**
-     * @var string[]
-     */
-    private array $decodeFont = [];
 
     public function __construct(
         private HttpClientInterface  $crawlerClient,
@@ -39,13 +35,14 @@ final class GamesCrawler implements GamesCrawlerInterface
 
         $dom = new DOMDocument();
 
-        $dom->loadHTML(str_replace('&#', '', $html));
+        $html = str_replace('&#', '', $html);
+        $dom->loadHTML($html);
 
         $clubMatchInfoTransferList = [];
 
         $clubMatchInfoTransferList = $this->addDateAndCompetitionInfo($dom, $clubMatchInfoTransferList);
 
-        return $this->addScoreInfo($dom, $clubMatchInfoTransferList);
+        return $this->addScoreInfo($dom, $clubMatchInfoTransferList, $html);
     }
 
     /**
@@ -61,10 +58,6 @@ final class GamesCrawler implements GamesCrawlerInterface
         /** @var \DOMElement $info */
         foreach ($matchDateAndCompetitionInfo as $key => $info) {
             $text = $info->nodeValue;
-            if (!is_string($text)) {
-                continue;
-            }
-
             $nodeValue = trim($text);
 
             $clubMatchInfoTransfer = new ClubMatchInfoTransfer();
@@ -93,7 +86,6 @@ final class GamesCrawler implements GamesCrawlerInterface
                     $clubMatchInfoTransfer->competition = $competitionInfo[0];
                 }
 
-
                 $clubMatchInfoTransferList[$key] = $clubMatchInfoTransfer;
             }
 
@@ -105,13 +97,14 @@ final class GamesCrawler implements GamesCrawlerInterface
     /**
      * @param \DOMDocument $dom
      * @param \App\Component\Dto\ClubMatchInfoTransfer[] $clubMatchInfoTransferList
+     * @param string $html
      *
      * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
-    private function addScoreInfo(DOMDocument $dom, array $clubMatchInfoTransferList): array
+    private function addScoreInfo(DOMDocument $dom, array $clubMatchInfoTransferList, string $html): array
     {
         $matchScore = $this->getNodeListByClass($dom, 'column-score');
-
+        $fontInfo = $this->getFontInfo($dom);
 
         /** @var \DOMElement $info */
         foreach ($matchScore as $key => $info) {
@@ -132,9 +125,6 @@ final class GamesCrawler implements GamesCrawlerInterface
             $result = trim($info->nodeValue);
 
             if (str_contains($result, ':')) {
-
-                $fontInfo = $this->getFontInfo($dom);
-
                 $scoreInfo = explode(':', $result);
 
                 $clubMatchInfoTransferList[$key]->homeScore = $this->getScore($scoreInfo[0], $fontInfo);
@@ -148,15 +138,7 @@ final class GamesCrawler implements GamesCrawlerInterface
 
     private function getNodeListByClass(DOMDocument $dom, string $class): DOMNodeList
     {
-        $xpath = new DOMXPath($dom);
-        $domNodeList = $xpath->query(
-            sprintf(self::XPATH, $class),
-        );
-
-        if (!$domNodeList instanceof DOMNodeList || $domNodeList->length === 0) {
-            throw new RuntimeException('Empty');
-        }
-        return $domNodeList;
+        return DomXpathService::getNodeListByClass($dom, sprintf(self::XPATH, $class));
     }
 
     /**
@@ -185,32 +167,17 @@ final class GamesCrawler implements GamesCrawlerInterface
     /**
      * @param \DOMDocument $dom
      *
+     * @throws \App\Component\Service\Exception\XpathNotFound
      * @return string[]
      */
     private function getFontInfo(DOMDocument $dom): array
     {
-        if (count($this->decodeFont) === 0) {
-            $html = $dom->saveHTML();
-            if(!is_string($html)) {
-                return $this->decodeFont = [];
-            }
-            $findString = 'data-obfuscation="';
-            $pos = strpos($html, $findString);
+        /** @var \InternalIterator $dataObfuscationDomIterator */
+        $dataObfuscationDomIterator = DomXpathService::getNodeListByClass($dom, '//*/@data-obfuscation')
+            ->getIterator();
 
-            if($pos === false) {
-                return $this->decodeFont = [];
-            }
-            $cutHtml = substr($html, $pos + strlen($findString));
-            $pos = strpos($cutHtml, '"');
+        $decodeFontName = $dataObfuscationDomIterator->current()->nodeValue;
 
-            if($pos === false) {
-                return $this->decodeFont = [];
-            }
-
-            $decodeFontName = substr($cutHtml, 0, $pos);
-
-            $this->decodeFont = $this->decodeProxy->decodeFont($decodeFontName);
-        }
-        return $this->decodeFont;
+        return $this->decodeProxy->decodeFont($decodeFontName);
     }
 }

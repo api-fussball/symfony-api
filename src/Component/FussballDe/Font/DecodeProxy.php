@@ -36,12 +36,8 @@ final class DecodeProxy implements DecodeProxyInterface
             return $info;
         }
 
+        /** @var string $cacheContent */
         $cacheContent = file_get_contents($cacheFile);
-
-        if(!is_string($cacheContent)) {
-            return [];
-            //throw new RuntimeException('Font not found');
-        }
 
         try {
             return json_decode($cacheContent, true, self::DEPTH, JSON_THROW_ON_ERROR);
