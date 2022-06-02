@@ -22,7 +22,7 @@ final class HttpClient implements HttpClientInterface
         $content = $response->getContent();
 
         if(empty($content)) {
-            throw new RuntimeException('Empty Content for url:' . $url);
+            throw new RuntimeException('Empty Content for url: ' . $url);
         }
 
         return $content;
