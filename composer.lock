@@ -2534,20 +2534,20 @@
         },
         {
             "name": "symfony/error-handler",
-            "version": "v6.0.9",
+            "version": "v6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/error-handler.git",
-                "reference": "732ca203b3222cde3378d5ddf5e2883211acc53e"
+                "reference": "d02c662651e5de760bb7d5e94437113309e8f8a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/error-handler/zipball/732ca203b3222cde3378d5ddf5e2883211acc53e",
-                "reference": "732ca203b3222cde3378d5ddf5e2883211acc53e",
+                "url": "https://api.github.com/repos/symfony/error-handler/zipball/d02c662651e5de760bb7d5e94437113309e8f8a0",
+                "reference": "d02c662651e5de760bb7d5e94437113309e8f8a0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.2",
+                "php": ">=8.1",
                 "psr/log": "^1|^2|^3",
                 "symfony/var-dumper": "^5.4|^6.0"
             },
@@ -2585,7 +2585,7 @@
             "description": "Provides tools to manage errors and ease debugging PHP code",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/error-handler/tree/v6.0.9"
+                "source": "https://github.com/symfony/error-handler/tree/v6.1.0"
             },
             "funding": [
                 {
@@ -2601,7 +2601,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-23T10:32:42+00:00"
+            "time": "2022-05-23T10:32:57+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -4239,20 +4239,20 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v6.0.9",
+            "version": "v6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "ac81072464221e73ee994d12f0b8a2af4a9ed798"
+                "reference": "98587d939cb783aa04e828e8fa857edaca24c212"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/ac81072464221e73ee994d12f0b8a2af4a9ed798",
-                "reference": "ac81072464221e73ee994d12f0b8a2af4a9ed798",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/98587d939cb783aa04e828e8fa857edaca24c212",
+                "reference": "98587d939cb783aa04e828e8fa857edaca24c212",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.2",
+                "php": ">=8.1",
                 "symfony/polyfill-mbstring": "~1.0"
             },
             "conflict": {
@@ -4307,7 +4307,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v6.0.9"
+                "source": "https://github.com/symfony/var-dumper/tree/v6.1.0"
             },
             "funding": [
                 {
@@ -4323,7 +4323,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-21T13:33:31+00:00"
+            "time": "2022-05-21T13:34:40+00:00"
         },
         {
             "name": "symfony/var-exporter",
