@@ -2,23 +2,74 @@
 
 namespace App\Tests\Api\Controller;
 
+use App\Component\User\UserFacadeInterface;
+use App\Controller\Api;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ApiTest extends WebTestCase
 {
     private KernelBrowser $client;
+    private ObjectManager $entityManager;
+    private string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->client = static::createClient();
+
+        $container = self::getContainer();
+        $this->entityManager = $container->get('doctrine')->getManager();
+
+        $this->token = $container->get(UserFacadeInterface::class)
+            ->save('ninja@test-un.it')
+            ->token;
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $connection = $this->entityManager->getConnection();
+        $connection->executeQuery('TRUNCATE user');
+
+        $connection->close();
+    }
+
+
+    public function testClubWithoutAuthHeader(): void
+    {
+        $this->client->request('GET', '/api/club/not_found');
+
+        self::assertResponseStatusCodeSame(403);
+
+        $response = $this->client->getResponse();
+
+        self::assertTrue($response->headers->contains('Content-Type', 'application/json'));
+
+        $responseRequest = json_decode($response->getContent(), true);
+
+        self::assertArrayHasKey('data', $responseRequest);
+        self::assertEmpty($responseRequest['data']);
+
+        self::assertArrayHasKey('traces', $responseRequest);
+        self::assertGreaterThan(3, $responseRequest['traces']);
+
+        self::assertArrayHasKey('success', $responseRequest);
+        self::assertFalse($responseRequest['success']);
+
+        self::assertArrayHasKey('message', $responseRequest);
+        self::assertSame(
+            'Token in header: "x-auth-token" not found',
+            $responseRequest['message']
+        );
     }
 
     public function testClub(): void
     {
-        $this->client->request('GET', '/api/club/00ES8GN91400002IVV0AG08LVUPGND5I');
+        $this->request('GET', '/api/club/00ES8GN91400002IVV0AG08LVUPGND5I');
 
         self::assertResponseStatusCodeSame(200);
 
@@ -45,7 +96,7 @@ class ApiTest extends WebTestCase
 
     public function testClubInfo(): void
     {
-        $this->client->request('GET', '/api/club/info/00ES8GN91400002IVV0AG08LVUPGND5I');
+        $this->request('GET', '/api/club/info/00ES8GN91400002IVV0AG08LVUPGND5I');
 
         self::assertResponseStatusCodeSame(200);
 
@@ -69,7 +120,7 @@ class ApiTest extends WebTestCase
 
     public function testClubPrevGames(): void
     {
-        $this->client->request('GET', '/api/club/prev_games/00ES8GN91400002IVV0AG08LVUPGND5I');
+        $this->request('GET', '/api/club/prev_games/00ES8GN91400002IVV0AG08LVUPGND5I');
 
         $data = $this->getDataFromRequest();
         self::assertCount(10, $data);
@@ -84,7 +135,7 @@ class ApiTest extends WebTestCase
 
     public function testClubNextGames(): void
     {
-        $this->client->request('GET', '/api/club/next_games/00ES8GN91400002IVV0AG08LVUPGND5I');
+        $this->request('GET', '/api/club/next_games/00ES8GN91400002IVV0AG08LVUPGND5I');
 
         $data = $this->getDataFromRequest();
 
@@ -104,7 +155,7 @@ class ApiTest extends WebTestCase
 
     public function testTeam(): void
     {
-        $this->client->request('GET', '/api/team/011MIC9NDS000000VTVG0001VTR8C1K7#!');
+        $this->request('GET', '/api/team/011MIC9NDS000000VTVG0001VTR8C1K7#!');
 
         self::assertResponseStatusCodeSame(200);
 
@@ -128,7 +179,7 @@ class ApiTest extends WebTestCase
 
     public function testPrevTeamGames(): void
     {
-        $this->client->request('GET', '/api/team/prev_games/011MIC9NDS000000VTVG0001VTR8C1K7#!');
+        $this->request('GET', '/api/team/prev_games/011MIC9NDS000000VTVG0001VTR8C1K7#!');
 
         $data = $this->getDataFromRequest();
         self::assertGreaterThan(0, $data);
@@ -143,7 +194,7 @@ class ApiTest extends WebTestCase
 
     public function testNextTeamGames(): void
     {
-        $this->client->request('GET', '/api/team/next_games/011MIC9NDS000000VTVG0001VTR8C1K7');
+        $this->request('GET', '/api/team/next_games/011MIC9NDS000000VTVG0001VTR8C1K7');
 
         $data = $this->getDataFromRequest();
         self::assertGreaterThan(0, $data);
@@ -158,7 +209,7 @@ class ApiTest extends WebTestCase
 
     public function testTeamTable()
     {
-        $this->client->request('GET', '/api/team/table/011MIC9NDS000000VTVG0001VTR8C1K7');
+        $this->request('GET', '/api/team/table/011MIC9NDS000000VTVG0001VTR8C1K7');
 
         $data = $this->getDataFromRequest();
 
@@ -246,5 +297,18 @@ class ApiTest extends WebTestCase
         self::assertArrayHasKey('data', $responseRequest);
 
         return $responseRequest['data'];
+    }
+
+    private function request(string $method, string $url): void
+    {
+        $this->client->request(
+            $method,
+            $url,
+            [],
+            [],
+            [
+                'HTTP_' . Api::HEADER_AUTH_NAME => $this->token,
+            ]
+        );
     }
 }

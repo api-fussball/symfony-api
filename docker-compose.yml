@@ -5,5 +5,6 @@ services:
     image: 'mysql:8'
     environment:
       MYSQL_ROOT_PASSWORD: nexus123
+      MYSQL_DATABASE: symfony
     ports:
       - '3336:3306'

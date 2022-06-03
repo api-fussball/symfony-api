@@ -76,11 +76,17 @@
         "phpstan": [
             "vendor/bin/phpstan analyse -c phpStan.neon"
         ],
+        "psalm": [
+            "vendor/bin/psalm"
+        ],
         "infection": [
             "XDEBUG_MODE=coverage vendor/bin/infection --only-covered"
         ],
         "phpunit": [
-            "XDEBUG_MODE=coverage phpunit --coverage-html coverage"
+            "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html coverage"
+        ],
+        "simple-phpunit": [
+            "XDEBUG_MODE=coverage vendor/bin/phpunit --testsuite=Unit,Integration,Acceptance --coverage-html coverage"
         ]
 
     },

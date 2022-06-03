@@ -3,6 +3,7 @@
 namespace App\Component\Crawler;
 
 use App\Component\Crawler\Bridge\HttpClientInterface;
+use App\Component\Service\DomXpathService;
 use DOMDocument;
 use DOMNodeList;
 use DOMXPath;
@@ -24,16 +25,7 @@ final class CrawlerClient implements CrawlerClientInterface
 
         $dom->loadHTML($html);
 
-        $xpath = new DOMXPath($dom);
-
-        /** @var DOMNodeList $domNodeList */
-        $domNodeList = $xpath->query($xpathExpression);
-
-        if ($domNodeList->length > 0) {
-            return $domNodeList;
-        }
-
-        throw new RuntimeException('Empty');
+        return DomXpathService::getNodeListByClass($dom, $xpathExpression);
     }
 
 

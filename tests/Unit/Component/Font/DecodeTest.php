@@ -15,7 +15,9 @@ class DecodeTest extends TestCase
     protected function tearDown(): void
     {
         array_map('unlink', glob(__DIR__ . '/tmp/fonts/*.*'));
-        rmdir(__DIR__ . '/tmp/fonts');
+        if (is_dir(__DIR__ . '/tmp/fonts')) {
+            rmdir(__DIR__ . '/tmp/fonts');
+        }
 
         parent::tearDown();
     }
@@ -57,6 +59,20 @@ class DecodeTest extends TestCase
                 $this->fail('File exist:');
             }
         }
+    }
+
+    public function testException()
+    {
+        $mockHttpClient = $this->getHttpClientMock();
+
+        $parameterBag = new ParameterBag([
+            'kernel.cache_dir' => 1,
+        ]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('CacheDir not found');
+
+        new Decode($mockHttpClient, $parameterBag);
     }
 
 
