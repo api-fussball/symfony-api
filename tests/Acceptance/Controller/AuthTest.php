@@ -2,18 +2,33 @@
 
 namespace App\Tests\Acceptance\Controller;
 
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AuthTest extends WebTestCase
 {
     private KernelBrowser $client;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->client = static::createClient();
+
+        $container = self::getContainer();
+        $this->entityManager = $container->get('doctrine')->getManager();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $connection = $this->entityManager->getConnection();
+        $connection->executeQuery('TRUNCATE user');
+
+        $connection->close();
     }
 
     public function testAuthRegister(): void
