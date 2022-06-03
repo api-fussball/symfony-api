@@ -23,7 +23,7 @@ class ExceptionListener
             'data' => [],
         ];
 
-        if($request->server->get('APP_ENV') === 'dev') {
+        if($request->server->get('APP_ENV') !== 'prod') {
             $data['traces'] = $exception->getTrace();
         }
 

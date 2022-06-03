@@ -76,6 +76,9 @@
         "phpstan": [
             "vendor/bin/phpstan analyse -c phpStan.neon"
         ],
+        "psalm": [
+            "vendor/bin/psalm"
+        ],
         "infection": [
             "XDEBUG_MODE=coverage vendor/bin/infection --only-covered"
         ],
