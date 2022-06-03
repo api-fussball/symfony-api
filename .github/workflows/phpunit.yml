@@ -39,7 +39,10 @@ jobs:
       - name: Run test suite
         run: php vendor/bin/phpunit
 
+      - name: Run mutation test
+        run: php vendor/bin/infection --only-covered --min-msi=100 --min-covered-msi=100
+
       - uses: codecov/codecov-action@v3
         with:
           file: ./clover.xml
-    
+
