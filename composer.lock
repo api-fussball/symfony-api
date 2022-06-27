@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2cf43a25a79efa599041896297c87704",
+    "content-hash": "79fee24bf8e0a37fb32f319c6a009a30",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -4399,20 +4399,20 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v6.0.3",
+            "version": "v6.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "e77f3ea0b21141d771d4a5655faa54f692b34af5"
+                "reference": "b01c4e7dc6a51cbf114567af04a19789fd1011fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/e77f3ea0b21141d771d4a5655faa54f692b34af5",
-                "reference": "e77f3ea0b21141d771d4a5655faa54f692b34af5",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/b01c4e7dc6a51cbf114567af04a19789fd1011fe",
+                "reference": "b01c4e7dc6a51cbf114567af04a19789fd1011fe",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.2",
+                "php": ">=8.1",
                 "symfony/polyfill-ctype": "^1.8"
             },
             "conflict": {
@@ -4453,7 +4453,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v6.0.3"
+                "source": "https://github.com/symfony/yaml/tree/v6.1.2"
             },
             "funding": [
                 {
@@ -4469,7 +4469,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-26T17:23:29+00:00"
+            "time": "2022-06-20T12:01:07+00:00"
         }
     ],
     "packages-dev": [
