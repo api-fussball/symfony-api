@@ -32,7 +32,7 @@ class Auth
 
         try {
             if(!isset($info['email'])) {
-                throw new \RuntimeException('Error! Field user not found');
+                throw new \RuntimeException('Error! Field email not found');
             }
             $email = filter_var($info['email'], FILTER_SANITIZE_EMAIL);
 
