@@ -4154,20 +4154,20 @@
         },
         {
             "name": "symfony/string",
-            "version": "v6.0.9",
+            "version": "v6.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "df9f03d595aa2d446498ba92fe803a519b2c43cc"
+                "reference": "290972cad7b364e3befaa74ba0ec729800fb161c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/df9f03d595aa2d446498ba92fe803a519b2c43cc",
-                "reference": "df9f03d595aa2d446498ba92fe803a519b2c43cc",
+                "url": "https://api.github.com/repos/symfony/string/zipball/290972cad7b364e3befaa74ba0ec729800fb161c",
+                "reference": "290972cad7b364e3befaa74ba0ec729800fb161c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.2",
+                "php": ">=8.1",
                 "symfony/polyfill-ctype": "~1.8",
                 "symfony/polyfill-intl-grapheme": "~1.0",
                 "symfony/polyfill-intl-normalizer": "~1.0",
@@ -4219,7 +4219,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v6.0.9"
+                "source": "https://github.com/symfony/string/tree/v6.1.4"
             },
             "funding": [
                 {
@@ -4235,7 +4235,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-22T08:18:02+00:00"
+            "time": "2022-08-12T18:05:43+00:00"
         },
         {
             "name": "symfony/var-dumper",
