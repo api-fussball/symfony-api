@@ -155,7 +155,7 @@ final class GamesCrawler implements GamesCrawlerInterface
      */
     private function getScore(string $scoreInfo, array $fontInfo): string
     {
-        $scoreHome = array_filter(explode(';', $scoreInfo));
+        $scoreHome = explode(';', $scoreInfo);
 
         $finalScore = '';
         foreach ($scoreHome as $score) {
