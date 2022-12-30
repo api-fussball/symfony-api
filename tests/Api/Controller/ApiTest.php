@@ -217,11 +217,12 @@ class ApiTest extends WebTestCase
         $team = $data[0];
         self::assertTrue($team['isPromotion']);
         self::assertFalse($team['isRelegation']);
-        self::assertGreaterThan(0, $team['games']);
+
 
         $month = (int)date('m');
 
-        if ($month !== 7) {
+        if ($month !== 7 && $month !== 8) {
+            self::assertGreaterThan(0, $team['games']);
             self::assertGreaterThan(0, $team['goal']);
             self::assertGreaterThan(0, $team['points']);
             self::assertGreaterThan(0, $team['goalDifference']);
@@ -246,7 +247,7 @@ class ApiTest extends WebTestCase
         return $score;
     }
 
-    private function checkTeam(array $data, string $expectedTeam = 'Fühlingen I'): void
+    private function checkTeam(array $data, string $expectedTeam = 'Fühlingen'): void
     {
         $teams = [];
 
@@ -256,7 +257,14 @@ class ApiTest extends WebTestCase
         }
 
         $teams = array_unique($teams);
-        self::assertTrue(in_array($expectedTeam, $teams));
+        $findExpectedTeam = false;
+        foreach ($teams as $team) {
+            if(str_contains($team, 'Fühlingen') === true) {
+                $findExpectedTeam = true;
+                break;
+            }
+        }
+        self::assertTrue($findExpectedTeam, $expectedTeam . ' is not in $teams array');
     }
 
     private function checkDate(array $data): void

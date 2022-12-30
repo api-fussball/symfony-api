@@ -33,19 +33,19 @@ class PrevGamesWithNotFountFontTest extends TestCase
         self::assertCount(10, $matchInfo);
 
         $firstGame = $matchInfo[0];
-        self::assertSame('-',$firstGame->homeScore);
-        self::assertSame('-',$firstGame->awayScore);
+        self::assertSame('',$firstGame->homeScore);
+        self::assertSame('',$firstGame->awayScore);
 
         $firstGame = $matchInfo[1];
-        self::assertSame('-',$firstGame->homeScore);
-        self::assertSame('-',$firstGame->awayScore);
+        self::assertSame('',$firstGame->homeScore);
+        self::assertSame('',$firstGame->awayScore);
 
         $seniorGame = $matchInfo[6];
-        self::assertSame('--',$seniorGame->homeScore);
-        self::assertSame('-',$seniorGame->awayScore);
+        self::assertSame('',$seniorGame->homeScore);
+        self::assertSame('',$seniorGame->awayScore);
 
         $unclearScoreGame = $matchInfo[9];
-        self::assertSame('-',$unclearScoreGame->homeScore);
-        self::assertSame('--',$unclearScoreGame->awayScore);
+        self::assertSame('',$unclearScoreGame->homeScore);
+        self::assertSame('',$unclearScoreGame->awayScore);
     }
 }

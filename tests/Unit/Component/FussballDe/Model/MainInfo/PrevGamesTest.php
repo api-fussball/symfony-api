@@ -58,6 +58,6 @@ class PrevGamesTest extends TestCase
 
         $unclearScoreGame = $matchInfo[9];
         self::assertSame('-',$unclearScoreGame->homeScore);
-        self::assertSame('1-',$unclearScoreGame->awayScore);
+        self::assertSame('1',$unclearScoreGame->awayScore);
     }
 }
