@@ -57,4 +57,32 @@ class PrevTeamGamesTest extends TestCase
         self::assertSame('24.04.2022',$seniorGame->date);
         self::assertSame('15:00',$seniorGame->time);
     }
+
+
+    public function testGamesWithStatus()
+    {
+        $crawlerFaker = $this->createStub(HttpClientInterface::class);
+        $crawlerFaker->method('getHtml')
+            ->willReturn(file_get_contents(__DIR__ . '/../../../../../_data/prev_team_games_status.html'));
+
+        $decodeProxyStub = $this->createStub(DecodeProxyInterface::class);
+        $decodeProxyStub->method('decodeFont')
+            ->willReturn(json_decode(file_get_contents(__DIR__ . '/mbxdus9j.json'), true));
+
+        $prevGames = new Games(
+            new GamesCrawler(
+                $crawlerFaker,
+                $decodeProxyStub
+            )
+        );
+
+        $matchInfo = $prevGames->getPrevClubGames(new FussballDeRequest());
+
+        self::assertCount(5, $matchInfo);
+
+        self::assertSame('', $matchInfo[0]->status);
+        self::assertSame('Nichtantritt GAST', $matchInfo[1]->status);
+        self::assertSame('Absetzung', $matchInfo[2]->status);
+        self::assertSame('o.E.', $matchInfo[4]->status);
+    }
 }

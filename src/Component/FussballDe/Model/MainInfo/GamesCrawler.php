@@ -8,8 +8,6 @@ use App\Component\FussballDe\Font\DecodeProxyInterface;
 use App\Component\Service\DomXpathService;
 use DOMDocument;
 use DOMNodeList;
-use DOMXPath;
-use RuntimeException;
 
 final class GamesCrawler implements GamesCrawlerInterface
 {
@@ -42,7 +40,7 @@ final class GamesCrawler implements GamesCrawlerInterface
 
         $clubMatchInfoTransferList = $this->addDateAndCompetitionInfo($dom, $clubMatchInfoTransferList);
 
-        return $this->addScoreInfo($dom, $clubMatchInfoTransferList, $html);
+        return $this->addScoreInfo($dom, $clubMatchInfoTransferList);
     }
 
     /**
@@ -97,19 +95,27 @@ final class GamesCrawler implements GamesCrawlerInterface
     /**
      * @param \DOMDocument $dom
      * @param \App\Component\Dto\ClubMatchInfoTransfer[] $clubMatchInfoTransferList
-     * @param string $html
      *
      * @return \App\Component\Dto\ClubMatchInfoTransfer[]
      */
-    private function addScoreInfo(DOMDocument $dom, array $clubMatchInfoTransferList, string $html): array
+    private function addScoreInfo(DOMDocument $dom, array $clubMatchInfoTransferList): array
     {
         $matchScore = $this->getNodeListByClass($dom, 'column-score');
         $fontInfo = $this->getFontInfo($dom);
 
         /** @var \DOMElement $info */
         foreach ($matchScore as $key => $info) {
+
+            /** @var \DOMElement $item */
+            foreach ($info->getElementsByTagName('span') as $item) {
+                if ($item->getAttribute('class') === 'info-text') {
+                    $clubMatchInfoTransferList[$key]->status = $item->nodeValue;
+                }
+            }
+
             /** @var \DOMElement $previousElementSibling */
             $previousElementSibling = $info->previousElementSibling;
+
 
             /** @var \DOMElement $matchInfo */
             $matchInfo = $previousElementSibling->getElementsByTagName('span')[0];
@@ -154,7 +160,7 @@ final class GamesCrawler implements GamesCrawlerInterface
         $finalScore = '';
         foreach ($scoreHome as $score) {
             $score = strtolower($score);
-            $info = '-';
+            $info = '';
             if (isset($fontInfo[$score])) {
                 $info = $fontInfo[$score];
             }

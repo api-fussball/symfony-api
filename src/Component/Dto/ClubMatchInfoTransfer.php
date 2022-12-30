@@ -14,4 +14,5 @@ final class ClubMatchInfoTransfer
     public string $awayTeam = '';
     public string $ageGroup = '';
     public string $competition = '';
+    public string $status = '';
 }
