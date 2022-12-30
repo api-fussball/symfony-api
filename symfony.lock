@@ -143,9 +143,6 @@
     "phar-io/version": {
         "version": "3.2.1"
     },
-    "phenx/php-font-lib": {
-        "version": "0.5.4"
-    },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
     },
