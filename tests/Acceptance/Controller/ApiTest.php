@@ -2,31 +2,47 @@
 
 namespace App\Tests\Acceptance\Controller;
 
+use App\Component\User\UserFacadeInterface;
+use App\Controller\Api;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ApiTest extends WebTestCase
 {
     private KernelBrowser $client;
+    private ObjectManager $entityManager;
+    private string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->client = static::createClient();
+
+        $container = self::getContainer();
+        $this->entityManager = $container->get('doctrine')->getManager();
+
+        $this->token = $container->get(UserFacadeInterface::class)
+            ->save('ninja@test-un.it')
+            ->token;
     }
 
-    public function testAuthRegister(): void
+    protected function tearDown(): void
     {
-        $header = [
-            'CONTENT_TYPE' => 'application/json',
-        ];
+        parent::tearDown();
 
-        $content = '{"email":"ninja@sec//ret.com"}';
+        $connection = $this->entityManager->getConnection();
+        $connection->executeQuery('TRUNCATE user');
 
-        $this->client->request('POST', '/auth/register', [], [], $header, $content);
+        $connection->close();
+    }
 
-        self::assertResponseStatusCodeSame(200);
+    public function testApiWithoutAuthHeader(): void
+    {
+        $this->client->request('GET', '/api/club/not_found');
+
+        self::assertResponseStatusCodeSame(403);
 
         $response = $this->client->getResponse();
 
@@ -34,26 +50,34 @@ class ApiTest extends WebTestCase
 
         $responseRequest = json_decode($response->getContent(), true);
 
+        self::assertArrayHasKey('data', $responseRequest);
+        self::assertEmpty($responseRequest['data']);
+
+        self::assertArrayHasKey('traces', $responseRequest);
+        self::assertGreaterThan(3, $responseRequest['traces']);
+
+        self::assertArrayHasKey('success', $responseRequest);
+        self::assertFalse($responseRequest['success']);
+
+        self::assertArrayHasKey('message', $responseRequest);
         self::assertSame(
-            'Please copy the token. After leaving the page, copying again is not possible.',
+            'Token in header: "x-auth-token" not found',
             $responseRequest['message']
         );
-        self::assertSame('ninja@secret.com', $responseRequest['data']['email']);
-        self::assertSame(64, strlen($responseRequest['data']['token']));
-        self::assertTrue($responseRequest['success']);
     }
 
-    public function testAuthRegisterWithInccorectEmail(): void
+    public function testApiWithInncorectAuthHeader(): void
     {
-        $header = [
-            'CONTENT_TYPE' => 'application/json',
-        ];
+        $token = substr($this->token, 1, -1);
+        $this->client->request(
+            method: 'GET',
+            uri: '/api/club/not_found',
+            server: [
+                'HTTP_' . Api::HEADER_AUTH_NAME => $token,
+            ]
+        );
 
-        $content = '{"email":"ninja@secret"}';
-
-        $this->client->request('POST', '/auth/register', [], [], $header, $content);
-
-        self::assertResponseStatusCodeSame(400);
+        self::assertResponseStatusCodeSame(401);
 
         $response = $this->client->getResponse();
 
@@ -61,9 +85,20 @@ class ApiTest extends WebTestCase
 
         $responseRequest = json_decode($response->getContent(), true);
 
-        self::assertSame('Email "ninja@secret" is not valid!', $responseRequest['message']);
+        self::assertArrayHasKey('data', $responseRequest);
         self::assertEmpty($responseRequest['data']);
+
+        self::assertArrayHasKey('traces', $responseRequest);
+        self::assertGreaterThan(3, $responseRequest['traces']);
+
+        self::assertArrayHasKey('success', $responseRequest);
         self::assertFalse($responseRequest['success']);
+
+        self::assertArrayHasKey('message', $responseRequest);
+        self::assertSame(
+            sprintf('Token "%s" not found', $token),
+            $responseRequest['message']
+        );
     }
 
 }

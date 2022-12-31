@@ -38,35 +38,6 @@ class ApiTest extends WebTestCase
         $connection->close();
     }
 
-
-    public function testClubWithoutAuthHeader(): void
-    {
-        $this->client->request('GET', '/api/club/not_found');
-
-        self::assertResponseStatusCodeSame(403);
-
-        $response = $this->client->getResponse();
-
-        self::assertTrue($response->headers->contains('Content-Type', 'application/json'));
-
-        $responseRequest = json_decode($response->getContent(), true);
-
-        self::assertArrayHasKey('data', $responseRequest);
-        self::assertEmpty($responseRequest['data']);
-
-        self::assertArrayHasKey('traces', $responseRequest);
-        self::assertGreaterThan(3, $responseRequest['traces']);
-
-        self::assertArrayHasKey('success', $responseRequest);
-        self::assertFalse($responseRequest['success']);
-
-        self::assertArrayHasKey('message', $responseRequest);
-        self::assertSame(
-            'Token in header: "x-auth-token" not found',
-            $responseRequest['message']
-        );
-    }
-
     public function testClub(): void
     {
         $this->request('GET', '/api/club/00ES8GN91400002IVV0AG08LVUPGND5I');
