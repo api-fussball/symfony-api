@@ -26,11 +26,7 @@ class ExceptionListener
 
         $response = new JsonResponse($data);
 
-        if ($exception instanceof HttpExceptionInterface) {
-            $response->setStatusCode($exception->getStatusCode());
-            $response->headers->replace($exception->getHeaders());
-            $response->headers->set('Content-Type', 'application/json');
-        } else {
+        if (!$exception instanceof HttpExceptionInterface) {
             $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 

@@ -28,12 +28,13 @@ class Auth
         $data = [];
 
         $content = $request->getContent();
-        $info = (array)json_decode($content, true);
+        $info = json_decode($content, true);
 
         try {
             if(!isset($info['email'])) {
                 throw new \RuntimeException('Error! Field email not found');
             }
+            /** @var string $email */
             $email = filter_var($info['email'], FILTER_SANITIZE_EMAIL);
 
             $userTransfer = $this->userFacade->save($email);
