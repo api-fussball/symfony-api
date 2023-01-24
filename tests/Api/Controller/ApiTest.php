@@ -58,10 +58,10 @@ class ApiTest extends WebTestCase
         foreach ($clubs as $club) {
             $info = explode('/', $club['fussballDeUrl']);
             $id = end($info);
-            self::assertSame('/club/next_games/' . $id, $club['urls']['nextGames']);
-            self::assertSame('/club/prev_games/' . $id, $club['urls']['prevGames']);
-            self::assertSame('/club/table/' . $id, $club['urls']['table']);
-            self::assertSame('/club/' . $id, $club['urls']['allInfo']);
+            self::assertSame('/api/team/next_games/' . $id, $club['urls']['nextGames']);
+            self::assertSame('/api/team/prev_games/' . $id, $club['urls']['prevGames']);
+            self::assertSame('/api/team/table/' . $id, $club['urls']['table']);
+            self::assertSame('/api/team/' . $id, $club['urls']['allInfo']);
         }
     }
 

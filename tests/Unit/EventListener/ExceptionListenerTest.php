@@ -28,5 +28,6 @@ final class ExceptionListenerTest extends TestCase
         $response = $exceptionEvent->getResponse();
 
         self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame('application/json', $response->headers->get('Content-Type'));
     }
 }

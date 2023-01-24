@@ -198,10 +198,10 @@ class Api
             unset($clubInfoTransferForApi['id']);
 
             $clubInfoTransferForApi['urls'] = [
-                'nextGames' => '/club/next_games/' . $clubInfoTransfer->id,
-                'prevGames' => '/club/prev_games/' . $clubInfoTransfer->id,
-                'table' => '/club/table/' . $clubInfoTransfer->id,
-                'allInfo' => '/club/' . $clubInfoTransfer->id,
+                'nextGames' => '/api/team/next_games/' . $clubInfoTransfer->id,
+                'prevGames' => '/api/team/prev_games/' . $clubInfoTransfer->id,
+                'table' => '/api/team/table/' . $clubInfoTransfer->id,
+                'allInfo' => '/api/team/' . $clubInfoTransfer->id,
             ];
 
             $clubInfoTransferListForApi[] = $clubInfoTransferForApi;

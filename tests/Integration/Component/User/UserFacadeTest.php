@@ -2,6 +2,7 @@
 
 namespace App\Tests\Integration\Component\User;
 
+use App\Component\Dto\UserTransfer;
 use App\Component\User\UserFacade;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -47,10 +48,15 @@ class UserFacadeTest extends KernelTestCase
 
     public function testChaneTokenWhenUserExistInDb()
     {
+        $email = 'new_not_set@unit.te';
+        $this->userFacade->save($email);
+
         $email = 'mega@unit.te';
 
-        $token = $this->userFacade->save($email)->token;
+        $userTransfer = $this->userFacade->save($email);
 
+        self::assertSame(2, $userTransfer->id);
+        $token = $userTransfer->token;
         $userTransfer = $this->userFacade->save($email);
         self::assertNotEmpty($userTransfer->token);
         self::assertSame(64, strlen($userTransfer->token));
