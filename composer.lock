@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de62d79e6476429b66b4d2aefdf2c3d7",
+    "content-hash": "a0f0dd34bf7199535084f69475193014",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -7924,16 +7924,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v6.2.3",
+            "version": "v6.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "3766b8269d3bac5c214a04ebd6870e71e52bcb60"
+                "reference": "56965fae0b6b8d271015990eff5240ffff02e185"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/3766b8269d3bac5c214a04ebd6870e71e52bcb60",
-                "reference": "3766b8269d3bac5c214a04ebd6870e71e52bcb60",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/56965fae0b6b8d271015990eff5240ffff02e185",
+                "reference": "56965fae0b6b8d271015990eff5240ffff02e185",
                 "shasum": ""
             },
             "require": {
@@ -7987,7 +7987,7 @@
             "description": "Provides utilities for PHPUnit, especially user deprecation notices management",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/phpunit-bridge/tree/v6.2.3"
+                "source": "https://github.com/symfony/phpunit-bridge/tree/v6.2.7"
             },
             "funding": [
                 {
@@ -8003,7 +8003,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-12-28T14:26:22+00:00"
+            "time": "2023-02-16T09:57:23+00:00"
         },
         {
             "name": "symfony/process",
