@@ -4238,16 +4238,16 @@
         },
         {
             "name": "symfony/var-exporter",
-            "version": "v6.2.13",
+            "version": "v6.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "e14c23915fdb9dfb4343d82e0094dec41a466c0a"
+                "reference": "3400949782c0cb5b3e73aa64cfd71dde000beccc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/e14c23915fdb9dfb4343d82e0094dec41a466c0a",
-                "reference": "e14c23915fdb9dfb4343d82e0094dec41a466c0a",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/3400949782c0cb5b3e73aa64cfd71dde000beccc",
+                "reference": "3400949782c0cb5b3e73aa64cfd71dde000beccc",
                 "shasum": ""
             },
             "require": {
@@ -4292,7 +4292,7 @@
                 "serialize"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-exporter/tree/v6.2.13"
+                "source": "https://github.com/symfony/var-exporter/tree/v6.3.2"
             },
             "funding": [
                 {
@@ -4308,7 +4308,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-26T17:35:55+00:00"
+            "time": "2023-07-26T17:39:03+00:00"
         },
         {
             "name": "symfony/yaml",
