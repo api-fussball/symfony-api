@@ -13,7 +13,7 @@ final class HttpClient implements HttpClientInterface
 
     public function getHtml(string $url): string
     {
-        $url = 'https://fussball.de' . $url;
+        $url = 'https://www.fussball.de' . $url;
         $response = $this->client->request(
             'GET',
             $url
