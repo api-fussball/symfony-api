@@ -16,7 +16,7 @@ class HttpClientTest extends TestCase
         );
 
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Empty Content for url: https://fussball.de/test');
+        $this->expectExceptionMessage('Empty Content for url: https://www.fussball.de/test');
 
         $crawlerClient = new HttpClient($httpClientMock);
         $crawlerClient->getHtml('/test');
